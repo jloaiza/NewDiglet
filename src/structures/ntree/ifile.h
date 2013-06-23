@@ -19,9 +19,11 @@ private:
     std::string _name;
     int _BlockSize;    
 	Lss* _LSS;
+	short _LastRegister;
 
     void getMetadata(char* pBlock, RegisterBuffer * pBuffer);
     void getData(char* pBlock, DataBuffer * pBuffer, RegisterBuffer * pMetadatos);
+    string_2_charArray(std::string pString, short pSize);
     
 public:
 
@@ -51,7 +53,11 @@ public:
     
     DataBuffer * getFileData(RegisterBuffer * pMetadatos);
 	
+	void apendReg(DataNode* pData);
 	
+	short writeReg(int pRegisterNumber, DataNode* pData);
+
+	void createFile(RegisterBuffer* pBuffer);
 
     /** INHERITANCE FROM COMPARABLE **/
 

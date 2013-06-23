@@ -76,6 +76,17 @@ void iFile::getData(char* pBlock, DataBuffer * pBuffer, RegisterBuffer * pMetada
 	}
 }
 
+char * iFile::string_2_charArray(std::string pString, short pSize)
+{
+	char * temporal = new char[pSize];
+	
+	for (int x=0; x<pSize; x++)
+	{
+		temporal[x] = pString[x];
+	}
+	return temporal;
+}
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 		PUBLIC		* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 iFile::iFile(std::string pName, BlockDirection * pDirection, int pBlockSize, Lss * pDisk)
@@ -84,6 +95,7 @@ iFile::iFile(std::string pName, BlockDirection * pDirection, int pBlockSize, Lss
 	_name = pName;
 	_FirstBlock = pDirection;
 	_LSS = pDisk;
+	_LastRegister = 0;
 }
 
 
@@ -175,6 +187,87 @@ DataBuffer * iFile::getFileData(RegisterBuffer * pMetadatos)
 		}
 	}
 	return DataNodes;
+}
+
+void iFile::apendReg(DataNode* pData)
+{
+	RegisterBuffer* Metadatos = getFileMetadata(); /* obtiene los metadatos del archivo */
+	short RegisterSize = Metadatos->getLength(); /* tamaño de cada registro */
+	
+	char* BloqueM1 = _LSS->readA(_FirstBlock->getBlock()); /* bloque de metadatos */
+	char* BloqueD1ptr = new char[10];	/* apuntador al primer bloque de datos */
+	for (int x=0; x<10; x++) { BloqueD1ptr[x] = BloqueM1[32+x]; }
+	BlockDirection * BD1ptr = new BlockDirection(BloqueD1ptr); /* direccion al primer bloque de datos */
+	
+	char* _register = new char[2]; _register[0]=BloqueM1[40]; _register[1]=BloqueM1[41];
+	/* direccion del ultimo registro libre */
+	short FreeRegister =  BytesHandler::to_ulong( BytesHandler::string2bin(std::string(_register,2), 2) ); 
+	
+	char* BloqueD1 = _LSS->readA(BD1ptr->getBlock()); /* primer bloque de datos */
+	
+	short type = pData->getType();
+	short size = pData->getSize();
+	std::string dato;
+	
+	if (type==1) /* si el dato es un bool */
+	{ 
+		dato = BytesHandler::snum2bin(pData->getData(), 1);
+	}
+	else if (type==2) /* si el dato es un char */
+	{
+		char* temporal = pData->getData();
+		dato[0] = temporal[0];
+	}
+	else if (type==3) /* si el dato es un short */
+	{
+		dato = BytesHandler::snum2bin(pData->getData(), 2);
+	}
+	else if (type==4) /* si el dato es un int */
+	{
+		dato = BytesHandler::snum2bin(pData->getData(), 4);
+	}
+	else if (type==5) /* si el dato es un double */
+	{
+		dato = BytesHandler::double2bin(pData->getData());
+	}
+	else /* si el dato es un string */
+	{
+		dato = BytesHandler::string2bin(pData->getData(), size);
+	}
+	
+	_LSS->writeB(dato, 10+(FreeRegister*RegisterSize); 
+	
+}
+
+void createFile(RegisterBuffer* pBuffer)
+{
+	short RegSize = pBuffer->getRegisterSize(); /* tamaño de cada registro */
+	short CantidadMetadatos = pBuffer->getLength(); /* cantidad de metadatos */
+	if ( CantidadMetadatos*RegSize > _BlockSize-44-RegSize ) /* los metadatos no caben en un solo bloque */
+	{
+	}
+	else /* los metadatos caben en un solo bloque */
+	{
+		std::string block;	/* bloque para escribir en el disco */
+		for (int x=0; x<24+RegSize; x++) { block[x] = 0; }
+		
+		RegisterSpace* temporal = pBuffer->getBuffer(); /* apuntador a cada metadato */
+		short aum = 0; /* numero de metadato */
+		while (aum < CantidadMetadatos) /* mientras que haya otro metadato */
+		{
+			std::string name = temporal->getName(); /* nombre del metadato */
+			short type = temporal->getType(); /* tipo del metadato */
+			short size = temporal->getSize(); /* tamaño del metadato */
+			std::string data;
+			data += BytesHandler::string2bin(name, size);
+			data += BytesHandler::snum2bin(type, 2);
+			data += BytesHandler::snum2bin(size, 2);
+			block += data; /* agregar al bloque */
+			temporal = temporal->getNext();
+			aum++;
+		}
+		short NumeroBloque = writeA(block, 0);
+	}
 }
 
 /** COMPARABLE INHERITANCE **/
