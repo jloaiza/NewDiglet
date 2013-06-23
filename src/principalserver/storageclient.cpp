@@ -6,11 +6,11 @@ StorageClient::StorageClient(std::string pIp, int pPort)
     _port = pPort;
 }
 
-std::string StorageClient::Connect(std::string pDiskID, std::string pSecurityKeyMD5)
+std::string StorageClient::connect(int pDiskID, std::string pSecurityKeyMD5)
 {
     Client* client = new Client(_ip,_port);
     client->Connect();
-    std::string message = std::string("connect ") + std::string("<") + std::string(pDiskID) + std::string("> ") + std::string("<") + std::string(pSecurityKeyMD5) + std::string(">");
+    std::string message = std::string("connect ") + std::string("<") + std::to_string(pDiskID) + std::string("> ") + std::string("<") + std::string(pSecurityKeyMD5) + std::string(">");
     std::cout << "vamos a leer" << std::endl;
     client->sendMessage(message);
     std::string messagea = client->readMessage();
