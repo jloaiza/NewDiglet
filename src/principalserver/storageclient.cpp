@@ -29,22 +29,22 @@ std::string StorageClient::getFreeBlock(std::string pDiskID)
     return messagea;
 }
 
-std::string StorageClient::readBlock(std::string pDiskID, std::string pBlock)
+std::string StorageClient::readBlock(std::string pDiskID, int pBlock)
 {
     Client* client = new Client(_ip,_port);
     client->Connect();
-    std::string message = std::string("readBlock ") + std::string(pDiskID) + std::string(" ") + std::string(pBlock);
+    std::string message = std::string("readBlock ") + std::string(pDiskID) + std::string(" ") + std::to_string(pBlock);
     client->sendMessage(message);
     std::string messagea = client->readMessage();
     delete client;
     return messagea; 
 }
 
-std::string StorageClient::writeBlock(std::string pDiskID, std::string pBlock, std::string pData)
+std::string StorageClient::writeBlock(std::string pDiskID, int pBlock, std::string pData)
 {
     Client* client = new Client(_ip,_port);
     client->Connect();
-    std::string message = std::string("writeBlock ") + std::string(pDiskID) + std::string(" ") + std::string(pBlock) + std::string(" ") + std::string(pData);
+    std::string message = std::string("writeBlock ") + std::string(pDiskID) + std::string(" ") + std::to_string(pBlock) + std::string(" ") + std::string(pData);
     client->sendMessage(message);
     std::string messagea = client->readMessage();
     delete client;
@@ -73,18 +73,18 @@ std::string StorageClient::getDiskSize(std::string pDiskID)
     return messagea;
 }
 
-std::string StorageClient::writeBytes(std::string pDiskID, std::string pBlock, std::string pOffSet, std::string pSize, std::string pData)
+std::string StorageClient::writeBytes(int pDiskID, int pBlock, int pOffSet, std::string pSize, std::string pData)
 {
     Client* client = new Client(_ip,_port);
     client->Connect();
-    std::string message = std::string("writeBytes ") + std::string(pDiskID) + std::string(" ") + std::string(pBlock) + std::string(" ") + std::string(pOffSet) + std::string(" ") + std::string(pSize) + std::string(" ") + std::string(pData);
+    std::string message = std::string("writeBytes ") + std::to_string(pDiskID) + std::string(" ") + std::to_string(pBlock) + std::string(" ") + std::to_string(pOffSet) + std::string(" ") + std::to_string(pSize) + std::string(" ") + std::string(pData);
     client->sendMessage(message);
     std::string messagea = client->readMessage();
     delete client;
     return messagea;
 }
 
-std::string StorageClient::readBytes(std::string pDiskID, std::string pBlock, std::string pOffSet, std::string pSize)
+std::string StorageClient::readBytes(int pDiskID, int pBlock, int pOffSet, std::string pSize)
 {
     Client* client = new Client(_ip,_port);
     client->Connect();
