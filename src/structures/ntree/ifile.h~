@@ -3,7 +3,7 @@
 
 #include <string>
 #include "../../include/comparable.h"
-#include "../../principalserver/blockdirection.h"
+#include "../principalserver/blockdirection.h"
 
 class iFile : public Comparable
 {
