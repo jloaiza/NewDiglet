@@ -1,29 +1,51 @@
-
 #include "ntree.h"
-#include "ntreenode.h"
+#include <iostream>
+#include "../../tokenizer/tokenizer.h"
 
-nTree::nTree(){
-
-    _head = new nTreeNode(0, "/");
+nTree::nTree()
+{
+    _root = new nTreeNode(NULL, "/");
 }
 
-void nTree::insert(std::string pName, iFile *pFile, std::string pPath){   
-
-
+void nTree::insert(iFile* pFile, nTreeNode* pActual, std::string pName, std::string pPath){
+    nTreeNode* toInsert = getNode(pActual, pPath);
+    if (toInsert == 0){
+        return;
+    }
+    nTreeNode* newNode = new nTreeNode(pFile, pName);
+    toInsert->addChild(newNode);
 }
 
-void nTree::erase(std::string pPath){
-    /** TODO **/
-    
+nTreeNode* nTree::getNode(nTreeNode* pActual, std::string pPath){
+    nTreeNode* iNode;
+    if (pActual == 0){
+        iNode = _root;
+    } else {
+        iNode = pActual;
+    }
+
+    std::string toMove = Tokenizer::getCommandSpace(pPath, 1, '/');
+    for (int i = 1; iNode != 0 && toMove != ""; i++){
+        if (toMove == ".."){
+            iNode = iNode->getParent();
+        } else {
+            iNode = iNode->getChild(toMove);
+        }
+        toMove = Tokenizer::getCommandSpace(pPath, i+1, '/');
+    }
+
+    return iNode;
 }
 
-nTreeNode* nTree::getHead(){
-    return _head;
+void nTree::erase(nTreeNode* pActual, std::string pPath){
+    nTreeNode* toErase = getNode(pActual, pPath);
+    if (toErase != 0 && toErase != _root){
+        toErase->getParent()->eraseChild(toErase->getName());
+    }
 }
 
-nTreeNode* nTree::getNode(std::string pPath){
-    /** TODO **/
-    return 0;
+void nTree::erase(nTreeNode* pNode){
+    if (pNode != _root){
+        pNode->getParent()->eraseChild(pNode->getName());
+    }
 }
-
-

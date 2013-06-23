@@ -1,52 +1,30 @@
+#ifndef NTREE
+#define NTREE
 
-#ifndef NTREE_H
-#define NTREE_H
+#include <iostream>
+#include "ntreenode.h"
+#include "ifile.h"
 
-#include <string>
-
-class nTreeNode;
-class iFile;
-
-
-class nTree {
-
-private:
-
-    nTreeNode* _head;
-
+class nTree 
+{
 public:
 
-    /**
-     * @brief nTree
-     */
     nTree();
 
-    /**
-     * @brief create
-     * @param pName
-     * @param pFile
-     * @param pPath
-     */
-    void insert(std::string pName, iFile* pFile, std::string pPath);
+    void insert(iFile* pFile, nTreeNode* pActual, std::string pName, std::string pPath);
 
-    /**
-     * @brief erase
-     * @param pPath
-     */
-    void erase(std::string pPath);
+    nTreeNode* getNode(nTreeNode* pActual, std::string pPath);
 
-    /**
-     * @brief getNode
-     * @param pPath
-     * @return
-     */
-    nTreeNode* getNode(std::string pPath);
+    void erase(nTreeNode* pActual, std::string pPath);
 
-    /**
-     * @brief getHead
-     * @return
-     */
-    nTreeNode* getHead();
+    void erase(nTreeNode* pNode);
+
+    nTreeNode* getRoot() const {
+        return _root;
+    }
+
+private:
+    nTreeNode* _root;
 };
 
-#endif
+#endif /* NTREE */
