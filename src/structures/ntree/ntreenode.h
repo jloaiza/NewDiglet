@@ -1,63 +1,105 @@
-
 #ifndef NTREENODE
 #define NTREENODE
 
 #include <string>
+#include "ifile.h"
+#include "../avltree/avltree.h"
 
-class SimpleList;
-class Comparable;
-class iFile;
-
-class nTreeNode {
-	
+class nTreeNode 
+{	
 private:
-	
-    Comparable* _file;
-    SimpleList* _children;
-	
+    iFile* _file;
+    AVLTree<nTreeNode, std::string>* _children;
+    nTreeNode* _parent;
+    std::string _name;
+    std::string _path;
+    
+
 public:
+	nTreeNode(iFile* pFile, std::string pName);
 
-    std::string name;
+	bool operator==(std::string& pNode){
+		return _name == pNode;
+	}
 
-    /**
-     * @param pFile archivo que almacenará
-     * @param pUser usuario dueño del archivo o carpeta
-     */
-    nTreeNode (Comparable* pPath, std::string pUser);
-	
-    /**
-     * agrega un hijo a la lista simple del nodo
-     * @param pNode nuevo nodo
-     */
-    void addChild(nTreeNode pNode);
+	bool operator<=(std::string& pNode){
+		return _name <= pNode;
+	}
 
-    /**
-     * retorna el hijo de un nodo
-     * @return
-     */
-    iFile* getChild(std::string pName);
+	bool operator<(std::string& pNode){
+		return _name < pNode;
+	}
 
-    //SimpleList* getChildrenList();
+	bool operator>=(std::string& pNode){
+		return _name >= pNode;
+	}
+	bool operator>(std::string& pNode){
+		return _name > pNode;
+	}
 
-    /**
-     * busca si existe un hijo del nodo
-     * @param pName nombre del hijo que se busca
-     * @return true si el hijo existe, false de lo contrario
-     */
-    bool searchChild(std::string pName);
+	bool operator==(nTreeNode& pNode){
+		return _name == pNode.getName();
+	}
 
-    /**
-     * @brief eraseChild
-     * @param pName
-     */
-    void eraseChild(std::string pName);
+	bool operator<=(nTreeNode& pNode){
+		return _name <= pNode.getName();
+	}
 
-    /**
-     * @brief print
-     */
-	void print();
-	
+	bool operator<(nTreeNode& pNode){
+		return _name < pNode.getName();
+	}
+
+	bool operator>=(nTreeNode& pNode){
+		return _name >= pNode.getName();
+	}
+
+	bool operator>(nTreeNode& pNode){
+		return _name > pNode.getName();
+	}
+
+	iFile* getFile() const {
+		return _file;
+	}
+
+	std::string getName() const {
+		return _name;
+	}
+
+	std::string getPath() const {
+		return _path;
+	}
+
+	void setPath(std::string pPath){
+		_path = pPath;
+	}
+
+	std::string getTotalPath() const {
+		return _path + '/' + _name;
+	}
+
+	nTreeNode* getParent() const {
+		return _parent;
+	}
+
+	void setParent(nTreeNode* pParent){
+		_parent = pParent;
+	}
+
+	nTreeNode* getChild(std::string pName) const {
+		return _children->search(&pName);
+	}
+
+	void eraseChild(std::string pName){
+		_children->erase(&pName);
+	}
+
+	void addChild(nTreeNode* pChild){
+		_children->insert(pChild);
+	}
+
+	AVLTree<nTreeNode, std::string>* getChildren() const {
+		return _children;
+	}
 };
-#endif
 
-
+#endif /* NTREENODE */

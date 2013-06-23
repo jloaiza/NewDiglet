@@ -2,58 +2,77 @@
 #define IFILE_H
 
 #include <string>
-#include "../util/comparable.h"
-#include "../principalserver/blockdirection.h"
+#include <iostream>
 
-class iFile : public Comparable
+class iFile
 {
 
 private:
 
-    BlockDirection* _FirstBlock;
-    std::string _name;
-    int _BlockSize;    
-	lss* _LSS;
+    std::string _diskID;
+    int _regCount;
+    int _startBlock;
 
-    void getMetadata(char* pBlock, RegisterBuffer * pBuffer);
-    void getData(char* pBlock, DataBuffer * pBuffer, RegisterBuffer * pMetadatos);
-    
 public:
 
     /**
-     * @param pName nombre del archivo
-     * @param pDirection direccion del primer bloque del archivo
-     * @param pBlockSize tamaño de cada bloque
+     * @brief iFile
+     * @param pName
+     * @param pDisk
+     * @param pPointer
      */
-    iFile(std::string pName, BlockDirection* pDirection, int pBlockSize);
+    iFile(std::string pDisk, int pStartBlock){
+        _regCount = 0;
+        _startBlock = pStartBlock;
+        _diskID = pDisk;
+    }
+
+    void addRegCount() {
+        _regCount++;
+    }
+
+    void removeRegCount() {
+        if (_regCount == 0){
+            std::cout<<"Error. Removing more registers than posibles. Check algorithms.";
+        }
+        _regCount--;
+    }
+
+    int getRegCount() const {
+        return _regCount;
+    }
 
     /**
-     * @return direccion del primer bloque del archivo
+     * @brief getDisk
+     * @return
      */
-    BlockDirection* getDirection();
+    std::string getDisk() const {
+        return _diskID;
+    }
 
     /**
-     * @param pDirection direccion del primer bloque del archivo
+     * @brief setDisk
+     * @param pDisk
      */
-    void setStartBlock(BlockDirection* pDirection);
-    
-    std::string getName();
-    
-    int getBlockSize();
-    
-    RegisterBuffer * getFileMetadata();
-    
-    DataNode * getFileData(RegisterBuffer * pMetadatos);
-	
-	
+    void setDisk(std::string pDisk){
+        _diskID = pDisk;
+    }
 
-    /** INHERITANCE FROM COMPARABLE **/
+    /**
+     * @brief getPointer
+     * @return
+     */
+    int getStartBlock() const{
+        return _startBlock;
+    }
 
-    bool eql(Comparable* arg);
-    bool gtr(Comparable* arg);
-    bool lss(Comparable* arg);
-    void print();
-
+    /**
+     * @brief setPointer
+     * @param pPointer
+     */
+    void setStartBlock(int pBlock){
+        _startBlock = pBlock;
+    }
 };
 
 #endif // IFILE_H
