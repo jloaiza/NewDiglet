@@ -3,8 +3,8 @@
 #define LssOPERATIONS
 
 #include "lss.h"
-#include "lssmanager.h"
 #include "../structures/doublelinkedlist/doublelinkedlist.h"
+#include "lssmanager.h"
 
 class Lss;
 

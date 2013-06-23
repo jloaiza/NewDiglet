@@ -1,7 +1,7 @@
 #ifndef LSSMANAGER
 #define LSSMANAGER
 
-#include "../structures/simplelist/simplelist.h"
+#include "simplelist/simplelist.h"
 #include "lssconsole.h"
 #include "lssnetworkhandler.h"
 #include "lss.h"

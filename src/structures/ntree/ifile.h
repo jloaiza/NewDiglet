@@ -58,6 +58,8 @@ public:
 	short writeReg(int pRegisterNumber, DataNode* pData);
 
 	void createFile(RegisterBuffer* pBuffer);
+	
+	
 
     /** INHERITANCE FROM COMPARABLE **/
 

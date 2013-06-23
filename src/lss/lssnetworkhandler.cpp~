@@ -1,9 +1,12 @@
-#include "lssnetworkhandler.h"
-#include "lssoperations.h"
-#include "../tokenizer/tokenizer.h"
-
 #include <exception>
-#include <cstdlib>
+#include <string>
+#include <cstring>
+#include <iostream>
+
+#include "../tokenizer/tokenizer.h"
+#include "lssoperations.h"
+#include "lss.h"
+#include "lssnetworkhandler.h"
 
 void LSSNetworkHandler::inMessage(std::string pMessage, int pSocket){
 	std::string command = Tokenizer::getCommandSpace(pMessage, 1);

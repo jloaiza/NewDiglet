@@ -193,7 +193,6 @@ void iFile::apendReg(DataNode* pData)
 {
 	RegisterBuffer* Metadatos = getFileMetadata(); /* obtiene los metadatos del archivo */
 	short RegisterSize = Metadatos->getLength(); /* tamaño de cada registro */
-	
 	char* BloqueM1 = _LSS->readA(_FirstBlock->getBlock()); /* bloque de metadatos */
 	char* BloqueD1ptr = new char[10];	/* apuntador al primer bloque de datos */
 	for (int x=0; x<10; x++) { BloqueD1ptr[x] = BloqueM1[32+x]; }
@@ -239,7 +238,60 @@ void iFile::apendReg(DataNode* pData)
 	
 }
 
-void createFile(RegisterBuffer* pBuffer)
+short iFile::writeReg(int pRegisterNumber, DataNode* pData)
+{
+	RegisterBuffer* Metadatos = getFileMetadata(); /* obtiene los metadatos del archivo */
+	short RegSize = Metadatos->getRegisterSize(); /* tamaño de cada registro */
+	short RegisterSize = Metadatos->getLength(); /* cantidad de registros */
+	char* BloqueM1 = _LSS->readA(_FirstBlock->getBlock()); /* bloque de metadatos */
+	char* BloqueD1ptr = new char[10];	/* apuntador al primer bloque de datos */
+	for (int x=0; x<10; x++) { BloqueD1ptr[x] = BloqueM1[32+x]; }
+	BlockDirection * BD1ptr = new BlockDirection(BloqueD1ptr); /* direccion al primer bloque de datos */
+	
+	while (true)
+	{
+		if (10+RegSize+(RegSize*RegisterSize)>pRegisterNumber) /* el registro buscado esta en el primer bloque */
+		{
+			short type = pData->getType();
+			short size = pData->getSize();
+			std::string dato;
+	
+			if (type==1) /* si el dato es un bool */
+			{ 
+				dato = BytesHandler::snum2bin(pData->getData(), 1);
+			}
+			else if (type==2) /* si el dato es un char */
+			{
+				char* temporal = pData->getData();
+				dato[0] = temporal[0];
+			}
+			else if (type==3) /* si el dato es un short */
+			{
+				dato = BytesHandler::snum2bin(pData->getData(), 2);
+			}
+			else if (type==4) /* si el dato es un int */
+			{
+				dato = BytesHandler::snum2bin(pData->getData(), 4);
+			}
+			else if (type==5) /* si el dato es un double */
+			{
+				dato = BytesHandler::double2bin(pData->getData());
+			}
+			else /* si el dato es un string */
+			{
+				dato = BytesHandler::string2bin(pData->getData(), size);
+			}
+			
+			_LSS->writeB(dato, 10+RegSize+(RegSize*pRegisterNumber), pRegisterNumber);
+		}
+		else /* el registro esta en otro bloque */
+		{
+			
+		}
+	}
+}
+
+void iFile::createFile(RegisterBuffer* pBuffer)
 {
 	short RegSize = pBuffer->getRegisterSize(); /* tamaño de cada registro */
 	short CantidadMetadatos = pBuffer->getLength(); /* cantidad de metadatos */
