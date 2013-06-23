@@ -1,23 +1,18 @@
-
-#ifndef STORAGE_CLIENT
-#define STORAGE_CLIENT 
-
-#include <string>
+#include "../clientcpp/client.h"
 
 class StorageClient
 {
-
 public:
-  std::string getIP();
-  std::string readBlock(int pID, int pBlock);
-
-  int writeBlock(int pID, std::string pData);
-  int writeBytes(int pID, int pBlock, int pOffset, int pSize, std::string pData);
-
-  std::string readBytes(int pID, int pBlock, int pOffset, int pSize);
-
-  bool isAlive(int pID);
-
+    StorageClient(std::string pIp, int pPort);
+    std::string Connect(std::string pDiskID, std::string pSecurityKeyMD5);
+    std::string getFreeBlock(std::string pDiskID);
+    std::string readBlock(std::string pDiskID, std::string pBlock);
+    std::string writeBlock(std::string pDiskID, std::string pBlock, std::string pData);
+    std::string getLssList();
+    std::string getDiskSize(std::string pDiskID);
+    std::string writeBytes(std::string pDiskID, std::string pBlock, std::string pOffSet, std::string pSize, std::string pData);
+    std::string readBytes(std::string pDiskID, std::string pBlock, std::string pOffSet, std::string pSize);
+private:
+    std::string _ip;
+    int _port;
 };
-
-#endif
