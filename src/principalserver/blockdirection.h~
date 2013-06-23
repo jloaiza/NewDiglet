@@ -3,7 +3,7 @@
 
 #include <string>
 #include <iostream>
-#include "../binaryoperations/byteshandler.h"
+#include "../../binaryoperations/byteshandler.h"
 
 class BlockDirection
 {

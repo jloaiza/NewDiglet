@@ -4,6 +4,7 @@
 #include <iostream>
 #include "ntreenode.h"
 #include "ifile.h"
+#include "../../include/comparable.h"
 
 class nTree 
 {

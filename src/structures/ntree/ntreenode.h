@@ -4,6 +4,7 @@
 #include <string>
 #include "ifile.h"
 #include "../avltree/avltree.h"
+#include "../../include/comparable.h"
 
 class nTreeNode 
 {	

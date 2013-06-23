@@ -48,7 +48,7 @@ std::string BlockDirection::getIP()
 	
 short BlockDirection::getDisk()
 {
-	return _disk
+	return _disk;
 }
 
 short BlockDirection::getBlock()
