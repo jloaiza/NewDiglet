@@ -17,7 +17,10 @@ nTreeNode* NoRaid::getNode(std::string pRelativePath, nTreeNode* pNode);
 
 /* operaciones sobre el registros */
 
-short NoRaid::apendReg(DataNode* pData, iFile* pFile);
+short NoRaid::apendReg(DataNode* pData, iFile* pFile)
+{
+	iFile->apendReg(pData);	////// agregar metodo al iFile
+}
 
 short NoRaid::writeReg(int pRegisterNumber, DataNode* pData, iFile* pFile);
 
