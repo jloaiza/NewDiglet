@@ -1,0 +1,5 @@
+
+SET(TOKENIZER_SOURCES
+  tokenizer.cpp)
+
+ADD_LIBRARY(tokenizer SHARED ${TOKENIZER_SOURCES})

@@ -1,0 +1,6 @@
+
+SET(NETWORKHANDLER_SOURCES
+  networkhandler.cpp)
+
+
+ADD_LIBRARY(networkhandler SHARED ${NETWORKHANDLER_SOURCES})

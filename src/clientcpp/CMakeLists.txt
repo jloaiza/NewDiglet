@@ -1,0 +1,5 @@
+
+SET(CLIENT_CPP_SOURCES
+  client.cpp)
+
+ADD_LIBRARY(clientcpp SHARED ${CLIENT_CPP_SOURCES})
