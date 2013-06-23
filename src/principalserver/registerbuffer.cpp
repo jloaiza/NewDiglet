@@ -2,6 +2,7 @@
 
 void RegisterBuffer::addSpace(std::string pName, int pSize, short pType){
 	RegisterSpace* newSpace = new RegisterSpace(pName, pSize, pType);
+	_length++;
 	if (_head == 0){
 		_head = _tail = newSpace;
 	} else {
@@ -10,8 +11,13 @@ void RegisterBuffer::addSpace(std::string pName, int pSize, short pType){
 	}
 }
 
-RegisterSpace* RegisterBuffer::getBuffer(){
-	return _head;
+int RegisterBuffer::getRegisterSize(){
+	int size = 0;
+	RegisterSpace* iSpace = _head;
+	while (iSpace != 0){
+		size += iSpace->getSize();
+	}
+	return size;
 }
 
 /**
@@ -21,4 +27,5 @@ RegisterSpace* RegisterBuffer::getBuffer(){
 */
 void RegisterBuffer::clear(){
 	_head = _tail = 0;
+	_length = 0;
 }
