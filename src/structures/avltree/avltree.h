@@ -18,7 +18,7 @@ private:
 	int balanceFactor(TreeNode<t>* pNode);
 };
 
-#endif /*AVL_TREE*/
+
 
 //-----------------------------Declaración de metodos--------------------------------------------
 
@@ -135,3 +135,5 @@ void AVLTree<t, c>::balanceTree(TreeNode<t>* pNode){
 		this->_root = pNode;
 	}
 }
+
+#endif /*AVL_TREE*/

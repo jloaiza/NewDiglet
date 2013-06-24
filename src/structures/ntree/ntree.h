@@ -12,7 +12,7 @@ public:
 
     nTree();
 
-    void insert(iFile* pFile, nTreeNode* pActual, std::string pName, std::string pPath);
+    void insert(iFile* pFile, nTreeNode* pActual, std::string pName, std::string pUser, std::string pPath);
 
     nTreeNode* getNode(nTreeNode* pActual, std::string pPath);
 

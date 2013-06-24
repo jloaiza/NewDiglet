@@ -4,15 +4,16 @@
 
 nTree::nTree()
 {
-    _root = new nTreeNode(NULL, "/");
+    _root = new nTreeNode(NULL, "/", "");
 }
 
-void nTree::insert(iFile* pFile, nTreeNode* pActual, std::string pName, std::string pPath){
+void nTree::insert(iFile* pFile, nTreeNode* pActual, std::string pName, std::string pUser, std::string pPath){
     nTreeNode* toInsert = getNode(pActual, pPath);
     if (toInsert == 0){
         return;
     }
-    nTreeNode* newNode = new nTreeNode(pFile, pName);
+    nTreeNode* newNode = new nTreeNode(pFile, pName, pUser);
+    newNode->setPath( pActual->getPath() + std::string("/") + pActual->getName() );
     toInsert->addChild(newNode);
 }
 

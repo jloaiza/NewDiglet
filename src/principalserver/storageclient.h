@@ -19,14 +19,15 @@ public:
     std::string getDiskSize(int pDiskID);
     std::string writeBytes(int pDiskID, int pBlock, int pOffSet, int pSize, std::string pData);
     std::string readBytes(int pDiskID, int pBlock, int pOffSet, int pSize);
-    std::string isAlive(int pDiskID);
+    bool isAlive(int pDiskID);
     void addDisk(Disk* pDisk);
     Disk* getDisk(short pDisk);
     std::string getIP() const {return _ip;}
+    bool isConnected();
 private:
     std::string _ip;
     int _port;
-    DoubleLinkedList<Disk, short>* _diskList;
+    DoubleLinkedList<Disk, std::string>* _diskList;
 };
 
 #endif /* STORAGECLIENT */

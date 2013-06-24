@@ -18,6 +18,10 @@ public:
 	void insertEnd(t* pData);
 	void insertStart(t* pData);
 
+	ListNode<t>* getHead() const{
+		return _head;
+	}
+
 	t* search(c* pData);
 	t* erase(c* pData);
 
@@ -102,7 +106,6 @@ void DoubleLinkedList<t, c>::insertStart(t* pData){
 		_head->setPrevious(newNode);
 		_head = newNode;
 	}
-	
 }
 
 template <class t, typename c>
@@ -151,7 +154,7 @@ t* DoubleLinkedList<t, c>::erase(c* pData){
 
 		} else {
 			toErase->getPrevious()->setNext(toErase->getNext());
-			toErase->getNext()->setPrevious(toErase->getPrevious);
+			toErase->getNext()->setPrevious(toErase->getPrevious());
 		}
 
 		t* tmp = toErase->getData();
