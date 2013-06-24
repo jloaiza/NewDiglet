@@ -1,4 +1,5 @@
 #include "lssconsole.h"
+#include "info.h"
 #include "../md5/md5.h"
 
 #include <iostream>

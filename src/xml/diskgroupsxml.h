@@ -1,3 +1,6 @@
+#ifndef DISKGROUPSXML
+#define DISKGROUPSXML
+
 #include "parserxml.h"
 
 class diskgroupsxml
@@ -17,3 +20,5 @@ public:
 	static std::string getDiskGroupDates(std::string pDocumentDirection, int pDiskGroupIndex);
 	static std::string getDiskGroupDiskId(std::string pDocumentDirection, int pDiskGroupIndex, int pDiskGroupDiskIndex);
 };
+
+#endif /* DISKGROUPSXML */

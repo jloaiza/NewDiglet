@@ -1,13 +1,13 @@
-#ifndef NORAID
-#define NORAID
+#ifndef RAIDONE
+#define RAIDONE
 
 #include "diskgroup.h"
 
-class NoRaid : public DiskGroup{
+class RaidOne : public DiskGroup{
 public:
 
-	NoRaid(std::string pID, int pBlockSize);
-	NoRaid(std::string pID, int pBlockSize, int pMaxSize, bool pFunctional, bool pWorking);
+	RaidOne(std::string pID, int pBlockSize);
+	RaidOne(std::string pID, int pBlockSize, int pMaxSize, bool pFunctional, bool pWorking);
 
 	void startDiskGroup();
 	
@@ -34,9 +34,10 @@ public:
 	std::string toBinario(DataNode* pData);
 
 private:
+	
 	void eraseFile(iFile* pFile);
 
 
 };
 
-#endif /* NORAID */
+#endif /* RAIDONE */

@@ -1,6 +1,7 @@
 #include "simplelist.h"
 #include <iostream>
 #include "node.h"
+#include "../../include/comparable.h"
 
 SimpleList::SimpleList()
 {

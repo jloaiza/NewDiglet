@@ -3,13 +3,52 @@
 
 #include "../clientcpp/client.h"
 #include "../structures/doublelinkedlist/doublelinkedlist.h"
-#include "disk.h"
 
 class Disk;
 
 class StorageClient
 {
 public:
+
+    bool operator==(std::string& pStorage){
+        return _ip == pStorage;
+    }
+    bool operator!=(std::string& pStorage){
+        return _ip != pStorage;
+    }
+    bool operator<=(std::string& pStorage){
+        return _ip <= pStorage;
+    }
+    bool operator<(std::string& pStorage){
+        return _ip < pStorage;
+    }
+    bool operator>=(std::string& pStorage){
+        return _ip >= pStorage;
+    }
+    bool operator>(std::string& pStorage){
+        return _ip > pStorage;
+    }
+
+    bool operator==(StorageClient& pStorage){
+        return _ip == pStorage.getIP();
+    }
+    bool operator!=(StorageClient& pStorage){
+        return _ip != pStorage.getIP();
+    }
+    bool operator<=(StorageClient& pStorage){
+        return _ip <= pStorage.getIP();
+    }
+    bool operator<(StorageClient& pStorage){
+        return _ip < pStorage.getIP();
+    }
+    bool operator>=(StorageClient& pStorage){
+        return _ip >= pStorage.getIP();
+    }
+    bool operator>(StorageClient& pStorage){
+        return _ip > pStorage.getIP();
+    }
+
+
     StorageClient(std::string pIp, int pPort);
     std::string connect(int pDiskID, std::string pSecurityKeyMD5);
     std::string getFreeBlock(int pDiskID);
@@ -27,7 +66,7 @@ public:
 private:
     std::string _ip;
     int _port;
-    DoubleLinkedList<Disk, std::string>* _diskList;
+    DoubleLinkedList<Disk, short>* _diskList;
 };
 
 #endif /* STORAGECLIENT */

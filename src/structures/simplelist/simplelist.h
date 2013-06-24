@@ -3,7 +3,6 @@
 #define SIMPLELIST_H
 
 #include <string>
-#include "../../include/comparable.h"
 
 class Node;
 class Comparable;

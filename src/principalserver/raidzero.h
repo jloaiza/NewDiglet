@@ -1,19 +1,18 @@
-#ifndef NORAID
-#define NORAID
+#ifndef RAIDZERO
+#define RAIDZERO
 
 #include "diskgroup.h"
 
-class NoRaid : public DiskGroup{
+class RaidZero : public DiskGroup{
 public:
 
-	NoRaid(std::string pID, int pBlockSize);
-	NoRaid(std::string pID, int pBlockSize, int pMaxSize, bool pFunctional, bool pWorking);
+	RaidZero(std::string pID, int pBlockSize);
+	RaidZero(std::string pID, int pBlockSize, int pMaxSize, bool pFunctional, bool pWorking);
+	DataNode* getFile(iFile* pFile);
 
 	void startDiskGroup();
 	
 	void stopDiskGroup();
-	
-	DataNode* getFile(iFile* pFile);
 
 	void deleteFile(nTreeNode* pNode);
 
@@ -39,4 +38,4 @@ private:
 
 };
 
-#endif /* NORAID */
+#endif /* RAIDZERO */

@@ -51,12 +51,11 @@ bool Session::operator>=(Session& pSession){
 }
 
 
-Session::Session(std::string pUser){
+Session::Session(std::string pUser, DiskGroup* pDisk){
 	_user = pUser;
+	_disk = pDisk;
 	_sessionID = _sessionCounter++;
 	_seek = -1;
-	_currentPath = "/";
-	_disk = 0;
-	_currentNode = 0;
+	_currentNode = pDisk->getNode("", 0);
 	_register = 0;
 }

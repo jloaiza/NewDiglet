@@ -1,95 +1,61 @@
-#include "diskgroup.h"
 #include "noraid.h"
-#include "../structures/ntreenode.h"
-#include "../structures/nTree.h"
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 		PRIVATE		* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+NoRaid::NoRaid(std::string pID, int pBlockSize){
 
-void NoRaid::eraseFile(iFile* pFile)
-{
+}
+
+NoRaid::NoRaid(std::string pID, int pBlockSize, int pMaxSize, bool pFunctional, bool pWorking){
+
+}
+
+void NoRaid::startDiskGroup(){
+
+}
 	
+void NoRaid::stopDiskGroup(){
+
 }
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 		PUBLIC		* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+DataNode* NoRaid::getFile(iFile* pFile){
 
-/* operaciones sobre el arbol n-ario */
-
-DataNode * NoRaid::getFile(iFile* pFile)
-{
-	RegisterBuffer * temporal = pFile->getFileMetadata();
-	return pFile->getFileData(temporal);
 }
 
-void NoRaid::deleteFile(nTreeNode* pNode)
-{
-	iFile * temporal = pNode->getFile();
-	temporal->~iFile;
-	_tree->erase(pNode);
+void NoRaid::deleteFile(nTreeNode* pNode){
+
 }
 
-nTreeNode * NoRaid::createFile(nTreeNode* pNode, std::string pName, RegisterSpace* pRegister, std::string pUser)
-{
-	iFile * temporal = new iFile(pName, 0, _BlockSize, 0);
-	temporal->createFile(pRegister);
-	_tree->insert(temporal, pNode, pName, pUser, "");
+nTreeNode* NoRaid::createFile(nTreeNode* pActual, std::string pName, RegisterSpace* pRegister, std::string pUser){
+
 }
 
-nTreeNode* NoRaid::getNode(std::string pRelativePath, nTreeNode* pNode)
-{
-	_tree->erase(pNode, pRelativePath);
+short NoRaid::apendReg(DataNode* pData, iFile* pFile){
+
 }
 
-/* operaciones sobre el registros */
+short NoRaid::writeReg(int pRegisterNumber, DataNode* pData, iFile* pFile){
 
-short NoRaid::apendReg(DataNode* pData, iFile* pFile)
-{
-	return iFile->apendReg(pData);
 }
 
-short NoRaid::writeReg(int pRegisterNumber, DataNode* pData, iFile* pFile)
-{
-	return pFile->writeReg(pRegisterNumber, pData);
+DataNode* NoRaid::readReg(int pRegisterNumber, iFile* pFile){
+
 }
 
-DataNode* NoRaid::readReg(int pRegisterNumber, iFile* pFile)
-{
-	return pFile->readReg(pRegisterNumber);
+void NoRaid::eraseReg(int pRegisterNumber, iFile* pFile){
+
 }
 
-void NoRaid::eraseReg(int pRegisterNumber, iFile* pFile)
-{
-	pFile->eraseReg(pRegisterNumber);
+RegisterSpace* NoRaid::getRegFormat(iFile* pFile){
+
 }
 
-RegisterSpace* NoRaid::getRegFormat(iFile* pFile)
-{
-	return pFile->getFileMetadata();
+void NoRaid::format(){
+
 }
 
-/* operaciones administrativas */
+std::string NoRaid::toBinario(DataNode* pData){
 
-void NoRaid::format()
-{
-	
 }
 
-/* operaciones sobre discos */
+void NoRaid::eraseFile(iFile* pFile){
 
-DoubleLinkedList<Disk, std::string>* NoRaid::getDiskList()
-{
-	return _diskList;
 }
-
-void NoRaid::addDisk(Disk* pDisk)
-{
-	_diskList->insertStart(pDisk); 
-}
-
-void NoRaid::removeDisk(std::string pIP, std::string pID)
-{
-	_diskList->erase(
-}
-
-void NoRaid::setBlockSize(int pSize);
-
-std::string NoRaid::toBinario(DataNode* pData);

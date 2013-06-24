@@ -1,15 +1,13 @@
 #ifndef LSSMANAGER
 #define LSSMANAGER
 
-#include "../structures/simplelist/simplelist.h"
+#include "simplelist/simplelist.h"
 #include "lssconsole.h"
 #include "lssnetworkhandler.h"
 #include "lss.h"
 
 class LssConsole;
 class LSSNetworkHandler;
-class LssManager;
-class SimpleList;
 
 /**
  * _lss lista de discos (LSS) en éste servidor de almacenamiento
@@ -89,6 +87,7 @@ public:
 	
 	void eraseBlock(short pID, short pBlock);
 	
+	
 	/**
 	 * @param pDiskID id del disco que se busca
 	 * @return tamaño del LSS
@@ -115,7 +114,9 @@ public:
 	
 	//short getFreeBlock(short pDiskID);	NOTA el lss se encarga de administrar los bloques libres
 
-	void startSystem();	
+	void startSystem();
+	
+	
 	
 	/************************************		PRINTS		************************************/
 	

@@ -4,7 +4,7 @@
 #include "registerbuffer.h"
 #include "datanode.h"
 #include "databuffer.h"
-#include "constants.h"
+#include "../include/constants.h"
 #include "../structures/ntree/ntreenode.h"
 #include "../tokenizer/tokenizer.h"
 #include "../xml/usersxml.h"
@@ -17,8 +17,8 @@ std::string ServerOperations::toCSV(DataNode* pData, RegisterSpace* pFormat){
 	DataNode* iNode = pData;
 
 	while (iNode != 0){
-		if (pData->getType() != STRING_TYPE){
-			if (pData->getType() != DOUBLE_TYPE){
+		if (pData->getType() != PS::STRING_TYPE){
+			if (pData->getType() != PS::DOUBLE_TYPE){
 				data += std::to_string(*(long*)(pData->getData()));
 			} else {
 				data += std::to_string(*(double*)(pData->getData()));
@@ -47,7 +47,7 @@ std::string ServerOperations::toCSV(DataNode* pData, RegisterSpace* pFormat){
 	return csv;
 }
 
-DataNode* getData(std::string pData, RegisterSpace* pFormat){
+DataNode* ServerOperations::getData(std::string pData, RegisterSpace* pFormat){
 	DataBuffer buffer;
 	for (int i = 1; pFormat != 0; i++){
 		int type = pFormat->getType();
@@ -60,14 +60,14 @@ DataNode* getData(std::string pData, RegisterSpace* pFormat){
 
 			try{
 
-				if (type != STRING_TYPE){
-					if (type == SHORT_TYPE){
+				if (type != PS::STRING_TYPE){
+					if (type == PS::SHORT_TYPE){
 						data = new short(std::stoi(dataSpace));
-					} else if(type == INT_TYPE){
+					} else if(type == PS::INT_TYPE){
 						data = new int(std::stoi(dataSpace));
-					} else if(type == LONG_TYPE){
+					} else if(type == PS::LONG_TYPE){
 						data = new long(std::stol(dataSpace));
-					} else if(type == DOUBLE_TYPE){
+					} else if(type == PS::DOUBLE_TYPE){
 						data = new double(std::stod(dataSpace));
 					}
 
@@ -102,7 +102,7 @@ RegisterSpace* ServerOperations::getFormat(std::string pFormat){
 				buffer.addSpace(name, size, type);
 
 			} else {
-				splitting connec= false;
+				splitting = false;
 			}
 		}
 	} catch (std::exception e){
@@ -124,7 +124,7 @@ std::string ServerOperations::get(int pSessionID, std::string pPath){
 		return "?Error. Archivo invalido\n";
 	}
 	DataNode* data = diskgroup->getFile(toReadNode->getFile());
-	RegisterSpace* format = diskgroup->getRegisterFormat(toReadNode->getFile());
+	RegisterSpace* format = diskgroup->getRegFormat(toReadNode->getFile());
 	return toCSV(data, format);
 }
 
@@ -161,7 +161,7 @@ std::string ServerOperations::rm(int pSessionID, std::string pPath){
 	if (rmNode == 0){
 		return "?Error. Ruta invalida\n";
 	}
-	diskgroup->del(rmNode);
+	diskgroup->deleteFile(rmNode);
 	return "";
 }
 
@@ -221,7 +221,7 @@ std::string ServerOperations::mkdir(int pSessionID, std::string pName){
 int ServerOperations::connect(std::string pUser, std::string pSecKey, std::string pDisk){
 	GeneralManager* manager = GeneralManager::getInstance();
 	if (manager->getUser(pUser)->getSecurityKey() != pSecKey){
-		return NO_SESSION;
+		return PS::NO_SESSION;
 	}
 	return manager->newSession(pUser, pDisk);
 }
@@ -229,7 +229,7 @@ int ServerOperations::connect(std::string pUser, std::string pSecKey, std::strin
 int ServerOperations::adduser(std::string pUser, std::string pSecKey, std::string pDisk){
 	GeneralManager* manager = GeneralManager::getInstance();
 	if (manager->getUser(pUser) != 0){
-		return NO_SESSION;
+		return PS::NO_SESSION;
 	}
 	manager->addUser(pUser, pSecKey);
 	return manager->newSession(pUser, pDisk);
@@ -252,7 +252,7 @@ std::string ServerOperations::openfile(int pSessionID, std::string pPath){
 	}
 
 	session->setCurrentNode(cdNode);
-	session->setCurrentFormat( diskgroup->getRegisterFormat( cdNode->getFile() ) );
+	session->setCurrentFormat( diskgroup->getRegFormat( cdNode->getFile() ) );
 	session->setSeek(0);
 	return "";
 }
@@ -270,9 +270,9 @@ std::string ServerOperations::appendReg(int pSessionID, std::string pData){
 		return "?Error. No hay ningún archivo abierto\n";
 	}
 
-	RegisterSpace* format = diskgroup->getRegisterFormat(currentNode->getFile());
+	RegisterSpace* format = diskgroup->getRegFormat(currentNode->getFile());
 	DataNode* data = getData(pData, format);
-	diskgroup->appendReg(data, currentNode->getFile());
+	diskgroup->apendReg(data, currentNode->getFile());
 	return "";
 
 }
@@ -290,12 +290,12 @@ std::string ServerOperations::delReg(int pSessionID, int pRegNum){
 		return "?Error. No hay ningún archivo abierto\n";
 	}	
 
-	if (pRegNum == SEEK_POS){
+	if (pRegNum == PS::SEEK_POS){
 		pRegNum = session->getSeek();
 	} else if (pRegNum > session->getCurrentNode()->getFile()->getRegCount()){
 		return "?Error. El número de registro es inválido";
 	}
-	diskgroup->eraseRegister(pRegNum, currentNode->getFile());
+	diskgroup->eraseReg(pRegNum, currentNode->getFile());
 	return "";
 }
 
@@ -312,16 +312,16 @@ std::string ServerOperations::write(int pSessionID, std::string pData, int pRegN
 		return "?Error. No hay ningún archivo abierto\n";
 	}	
 
-	if (pRegNum == SEEK_POS){
+	if (pRegNum == PS::SEEK_POS){
 		pRegNum = session->getSeek();
 	} else if (pRegNum > session->getCurrentNode()->getFile()->getRegCount()){
 		return "?Error. El número de registro es inválido";
 	}
 
-	RegisterSpace* format = diskgroup->getRegisterFormat(currentNode->getFile());
+	RegisterSpace* format = diskgroup->getRegFormat(currentNode->getFile());
 	DataNode* data = getData(pData, format);
 
-	diskgroup->writeRegister(pRegNum, data, currentNode->getFile());
+	diskgroup->writeReg(pRegNum, data, currentNode->getFile());
 	return "";
 }
 
@@ -338,18 +338,21 @@ std::string ServerOperations::readReg(int pSessionID, int pRegNum){
 		return "?Error. No hay ningún archivo abierto\n";
 	}	
 
-	if (pRegNum == SEEK_POS){
+	if (pRegNum == PS::SEEK_POS){
 		pRegNum = session->getSeek();
 	} else if (pRegNum > session->getCurrentNode()->getFile()->getRegCount()){
-		return "?Error. El número de registro es inválido";
+		return "?Error. El número de registro es inválido\n";
 	}
 
-	RegisterSpace* format = diskgroup->getRegisterFormat(currentNode->getFile());
-	DataNode* data = diskgroup->readRegister(pRegNum, currentNode->getFile());
+	RegisterSpace* format = diskgroup->getRegFormat(currentNode->getFile());
+	DataNode* data = diskgroup->readReg(pRegNum, currentNode->getFile());
 	return toCSV(data, format);
 }
 
 std::string ServerOperations::close(int* pSessionID){
+	if (*pSessionID == -1){
+		return "See ya!\n";
+	}
 	GeneralManager* manager = GeneralManager::getInstance();
 	Session* session = manager->getSession(*pSessionID);
 	if (session == 0){
@@ -357,7 +360,7 @@ std::string ServerOperations::close(int* pSessionID){
 	}
 	DiskGroup* diskgroup = session->getDiskGroup();
 	nTreeNode* currentNode = session->getCurrentNode();
-	if (currentNode->getFile != 0){
+	if (currentNode->getFile() != 0){
 		session->setCurrentNode(diskgroup->getNode("../", currentNode));
 		session->setSeek(0);
 		return "";
@@ -365,7 +368,7 @@ std::string ServerOperations::close(int* pSessionID){
 		std::string user = session->getUser();
 		manager->closeSession(*pSessionID);
 		*pSessionID = -1;
-		return "See ya, " + user + ".";
+		return "See ya, " + user + ".\n";
 	}
 }
 
