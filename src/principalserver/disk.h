@@ -2,7 +2,8 @@
 #define DISK
 
 #include <string>
-//#include "storageclient.h"
+#include "storageclient.h"
+
 class StorageClient;
 
 class Disk{
@@ -32,13 +33,13 @@ public:
 		return _id;
 	}
 
-	int getDiskDirection() const {
-		return _storageClient->getIP() + ":" + _id;
+	std::string getDiskDirection() const {
+		return _storageClient->getIP() + std::string(":") + std::to_string(_id);
 	}
 
 	bool isAlive();
 	std::string readBlock(int pBlock);
-	int writeBlock(std::string pData);
+	int writeBlock(std::string pData, int pBlock);
 	void writeBytes(int pBlock, int pOffset, int pSize, std::string pData);
 	std::string readBytes(int pBlock, int pOffset, int pSize);
 };

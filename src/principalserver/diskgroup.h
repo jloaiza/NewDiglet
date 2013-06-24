@@ -1,20 +1,41 @@
 #ifndef DISKGROUP
 #define DISKGROUP
 
-//#include "resgisterspacer.h"
-//#include "../basicstructures/datanode.h"
 
-class RegisterSpace;
-class DataBuffer;
-class DataNode;
+#include "registerspace.h"
+#include "datanode.h"
+#include "disk.h"
+#include "../structures/doublelinkedlist/doublelinkedlist.h"
+#include "../structures/ntree/ntree.h"
+#include "../structures/ntree/ntreenode.h"
+#include "../structures/ntree/ifile.h"
 
+#include <string>
 
-class DiskGroup 
+class DiskGroup
 {
 	
 public:
 	
-	
+	static const int NO_RAID = -1;
+	static const int RAID0 = 0;
+	static const int RAID1 = 1;
+	static const int RAID5 = 5;
+
+	bool operator==(std::string& pID);
+	bool operator>(std::string& pID);
+	bool operator>=(std::string& pID);
+	bool operator<(std::string& pID);
+	bool operator<=(std::string& pID);
+	bool operator!=(std::string& pID);
+
+	bool operator==(DiskGroup& pDiskGroup);
+	bool operator>(DiskGroup& pDiskGroup);
+	bool operator>=(DiskGroup& pDiskGroup);
+	bool operator<(DiskGroup& pDiskGroup);
+	bool operator<=(DiskGroup& pDiskGroup);
+	bool operator!=(DiskGroup& pDiskGroup);
+
 	/* operaciones sobre el arbol n-ario */
 	
 	
@@ -23,7 +44,7 @@ public:
 	 * @param pFile nombre del archivo que se cargará en memoria
 	 * @return lista de DataNodes con la informacion del archivo
 	 */
-	virtual DataNode * getFile(iFile pFile) = 0;
+	virtual DataNode* getFile(iFile* pFile) = 0;
 	
 	/**
 	 * borra un archivo o una carpeta
@@ -38,14 +59,7 @@ public:
 	 * @param pUser nombre del usuario que realiza la operacion
 	 * @return nodo donde se creó el archivo
 	 */
-	virtual nTreeNode * createFile(std::string pName, pRegisterList pRegister, std::string pUser) = 0;
-		
-	/**
-	 * busca un nodo con la direccion relativa
-	 * @param pRelativePath direccion relativa del nodo que buscamos
-	 */
-	virtual nTreeNode* getNode(std::string pRelativePath, nTreeNode* pNode) = 0;
-	
+	virtual nTreeNode* createFile(std::string pName, RegisterSpace* pRegister, std::string pUser) = 0;	
 	
 	/* operaciones sobre el registros */
 	
@@ -91,29 +105,60 @@ public:
 	
 	/* operaciones administrativas */
 	
+	virtual void format() = 0;
 	
-	virtual format() = 0;
+	std::string getID() const {
+		return _id;
+	}
+
+	/**
+	 * busca un nodo con la direccion relativa
+	 * @param pRelativePath direccion relativa del nodo que buscamos
+	 */
+	nTreeNode* getNode(std::string pRelativePath, nTreeNode* pNode);
 	
-	virtual std::string getID() = 0;
+	int getBlockSize() const {
+		return _blockSize;
+	}
+
+	void setBlockSize(int pSize){
+		_blockSize = pSize;
+		_functional = false;
+		_working = false;
+	}
 	
-	virtual int getBlockSize() = 0;
+	bool isWorking() const {
+		return _working;
+	}
+
+	bool isFunctional(){
+		return _functional;
+	}
 	
-	virtual bool isWorking() = 0;
-	
-	virtual bool isFunctional() = 0;
-	
+	void createDir(nTreeNode* pFolderNode, std::string pName, std::string pUser);
 		
 	/* operaciones sobre discos */
 
-	virtual SimpleList* getDiskList() = 0;
+	std::string getDiskList();
 	
-	virtual void addDisk(Disk* pDisk) = 0;
+	void addDisk(Disk* pDisk);
 	
-	virtual void removeDisk(std::string pIP, std::string pID) = 0;
-	
-	virtual void setBlockSize(int pSize) = 0;
+	void removeDisk(std::string pIP, short pID);
 		
 	virtual std::string toBinario(DataNode* pData) = 0;
+
+protected:
+	
+	std::string _id;
+	nTree* _files;
+	int _raid;
+	int _blockSize;
+	bool _functional;
+	bool _working;
+	DoubleLinkedList<Disk, std::string>* _diskList;
+
+	virtual void eraseFile(iFile* pFile) = 0;
+
 
 
 };

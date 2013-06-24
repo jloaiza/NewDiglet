@@ -73,6 +73,14 @@ std::string StorageClient::getDiskSize(std::string pDiskID)
     return messagea;
 }
 
+bool StorageClient::isConnected(){
+    Client* client = new Client(_ip,_port);
+    client->Connect();
+    bool connected = client->isConnect();
+    delete client;
+    return connected;
+}
+
 std::string StorageClient::writeBytes(int pDiskID, int pBlock, int pOffSet, std::string pSize, std::string pData)
 {
     Client* client = new Client(_ip,_port);
@@ -95,7 +103,7 @@ std::string StorageClient::readBytes(int pDiskID, int pBlock, int pOffSet, std::
     return messagea;
 }
 
-std::string StorageClient::isAlive(std::string pDiskID)
+bool StorageClient::isAlive(std::string pDiskID)
 {
     Client* client = new Client(_ip,_port);
     client->Connect();
@@ -103,7 +111,7 @@ std::string StorageClient::isAlive(std::string pDiskID)
     client->sendMessage(message);
     std::string messagea = client->readMessage();
     delete client;
-    return messagea;
+    return messagea != "";
 }
 
 void StorageClient::addDisk(Disk* pDisk)

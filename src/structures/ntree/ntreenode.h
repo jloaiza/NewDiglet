@@ -14,10 +14,11 @@ private:
     nTreeNode* _parent;
     std::string _name;
     std::string _path;
+    std::string _user;
     
 
 public:
-	nTreeNode(iFile* pFile, std::string pName);
+	nTreeNode(iFile* pFile, std::string pName, std::string pUser);
 
 	bool operator==(std::string& pNode){
 		return _name == pNode;
@@ -72,6 +73,14 @@ public:
 
 	void setPath(std::string pPath){
 		_path = pPath;
+	}
+
+	std::string getUser() const {
+		return _user;
+	}
+
+	void setUser(std::string pUser){
+		_user = pUser;
 	}
 
 	std::string getTotalPath() const {
