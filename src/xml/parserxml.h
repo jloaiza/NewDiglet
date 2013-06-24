@@ -1,7 +1,10 @@
-#include <QtXml>
-#include <QtCore>
-#include <QtDebug>
-#include <QXmlQuery>
+#ifndef PARSERXML
+#define PARSERXML
+
+#include <qt4/QtXml/QtXml>
+#include <qt4/QtCore/QtCore>
+#include <qt4/QtCore/QtDebug>
+#include <qt4/QtXmlPatterns/QXmlQuery>
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -110,7 +113,7 @@ public:
 	/**
 	* Función que evalua si la direción de un archivo dado existe.
 	*/
-	bool thereFile(std::string pFileDirection);
+	static bool thereFile(std::string pFileDirection);
 private:
 	/** Los siguientes métodos son únicos para el manejo del XML interno y no debe de ser modificados bajo ninguna circunstancia. */
 	/** ------------------------------------------------------------------------------------------------------------------------ */
@@ -152,3 +155,5 @@ private:
 	*/
 	QFile _file;
 };
+
+#endif /* PARSERXML */

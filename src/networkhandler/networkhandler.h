@@ -22,7 +22,7 @@
 #include <thread>
 
 /* Puerto  de la conexión. */
-#define PORT 8050
+#define PORT 8080
 
 /* Tamaño del buffer. */
 #define BUFFERSIZE 512

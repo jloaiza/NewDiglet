@@ -6,7 +6,7 @@
 #include "lssmanager.h"
 #include "../structures/doublelinkedlist/doublelinkedlist.h"
 
-class Lss;
+class SimpleList;
 
 class LssOperations {
 	

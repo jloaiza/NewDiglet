@@ -38,7 +38,6 @@ public:
 
 	/* operaciones sobre el arbol n-ario */
 	
-	
 	/**
 	 * busca y retorna un archivo del disco
 	 * @param pFile nombre del archivo que se cargará en memoria
@@ -46,6 +45,10 @@ public:
 	 */
 	virtual DataNode* getFile(iFile* pFile) = 0;
 	
+	virtual void startDiskGroup() = 0;
+
+	virtual void stopDiskGroup() = 0;
+
 	/**
 	 * borra un archivo o una carpeta
 	 * @param pNode nodo que se va a borrar
@@ -59,7 +62,7 @@ public:
 	 * @param pUser nombre del usuario que realiza la operacion
 	 * @return nodo donde se creó el archivo
 	 */
-	virtual nTreeNode* createFile(std::string pName, RegisterSpace* pRegister, std::string pUser) = 0;	
+	virtual nTreeNode* createFile(nTreeNode* pActual, std::string pName, RegisterSpace* pRegister, std::string pUser) = 0;	
 	
 	/* operaciones sobre el registros */
 	
@@ -144,6 +147,7 @@ public:
 	void addDisk(Disk* pDisk);
 	
 	void removeDisk(std::string pIP, short pID);
+
 		
 	virtual std::string toBinario(DataNode* pData) = 0;
 

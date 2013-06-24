@@ -5,45 +5,38 @@
 #include <exception>
 #include <cstdlib>
 
+
 void LSSNetworkHandler::inMessage(std::string pMessage, int pSocket){
 	std::string command = Tokenizer::getCommandSpace(pMessage, 1);
 	std::string param = Tokenizer::getParameters(pMessage);
 
-	if (command == "connect")
-	{
+	if (command == "connect"){
 		connect(pSocket, param);
-	}
-	else if (command == "getFreeBlock")
-	{
+
+	} else if (command == "getFreeBlock"){
 		getFreeBlock(pSocket, param);
-	}
-	else if (command == "readBlock")
-	{
+
+	} else if (command == "readBlock"){
 		readBlock(pSocket, param);
-	} 
-	else if (command == "writeBlock")
-	{
+
+	} else if (command == "writeBlock"){
 		writeBlock(pSocket, param);
-	}
-	else if (command == "getLssList")
-	{
+
+	} else if (command == "getLssList"){
 		getLssList(pSocket);
-	}
-	else if (command == "getSize")
-	{
+	
+	} else if (command == "getSize"){
 		getSize(pSocket, param);
-	}
-	else if (command == "writeBytes")
-	{
+	
+	} else if (command == "writeBytes"){
 		writeBytes(pSocket, param);
-	}
-	else if (command == "readBytes")
-	{
+
+	} else if (command == "readBytes"){
 		readBytes(pSocket, param);
-	}
-	else 
-	{
+
+	} else {
 		defaultCase(pSocket, command);
+
 	}
 }
 

@@ -1,4 +1,5 @@
 #include "disk.h"
+#include "storageclient.h"
 
 bool Disk::operator==(std::string& pDisk){
 	return getDiskDirection() == pDisk;
@@ -48,6 +49,30 @@ bool Disk::operator<=(Disk& pDisk){
 	return getDiskDirection() <= pDisk.getDiskDirection();
 }
 
+bool Disk::operator==(short& pDisk){
+	return _id == pDisk;
+}
+
+bool Disk::operator!=(short& pDisk){
+	return _id != pDisk;
+}
+
+bool Disk::operator>(short& pDisk){
+	return _id > pDisk;
+}
+
+bool Disk::operator>=(short& pDisk){
+	return _id >= pDisk;
+}
+
+bool Disk::operator<(short& pDisk){
+	return _id < pDisk;
+}
+
+bool Disk::operator<=(short& pDisk){
+	return _id <= pDisk;
+}
+
 Disk::Disk(StorageClient* pClient, int pID, std::string pSecKey){
 	_storageClient = pClient;
 	_id = pID;
@@ -55,6 +80,10 @@ Disk::Disk(StorageClient* pClient, int pID, std::string pSecKey){
 	_storageClient->connect(pID, pSecKey);
 	_storageClient->addDisk(this);
 }
+
+std::string Disk::getDiskDirection() {
+		return _storageClient->getIP() + std::string(":") + std::to_string(_id);
+	}
 
 std::string Disk::readBlock(int pBlock){
 	return _storageClient->readBlock(_id, pBlock);

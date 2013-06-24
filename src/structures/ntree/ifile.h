@@ -3,73 +3,76 @@
 
 #include <string>
 #include <iostream>
-#include "../../include/comparable.h"
-#include "../../principalserver/blockdirection.h"
-#include "../../lss/lss.h"
-#include "../../principalserver/databuffer.h"
-#include "../../principalserver/registerbuffer.h"
-#include "../../binaryoperations/byteshandler.h"
 
-class iFile : public Comparable
+class iFile
 {
 
 private:
 
-    BlockDirection* _FirstBlock;
-    std::string _name;
-    int _BlockSize;    
-	Lss* _LSS;
-	short _LastRegister;
+    std::string _diskID;
+    int _regCount;
+    int _startBlock;
 
-    void getMetadata(char* pBlock, RegisterBuffer * pBuffer);
-    void getData(char* pBlock, DataBuffer * pBuffer, RegisterBuffer * pMetadatos);
-    string_2_charArray(std::string pString, short pSize);
-    
 public:
 
     /**
-     * @param pName nombre del archivo
-     * @param pDirection direccion del primer bloque del archivo
-     * @param pBlockSize tamaño de cada bloque
-     * @param pDisk disco del archivo
+     * @brief iFile
+     * @param pName
+     * @param pDisk
+     * @param pPointer
      */
-    iFile(std::string pName, BlockDirection* pDirection, int pBlockSize, Lss * pDisk);
+    iFile(std::string pDisk, int pStartBlock){
+        _regCount = 0;
+        _startBlock = pStartBlock;
+        _diskID = pDisk;
+    }
+
+    void addRegCount() {
+        _regCount++;
+    }
+
+    void removeRegCount() {
+        if (_regCount == 0){
+            std::cout<<"Error. Removing more registers than posibles. Check algorithms.";
+        }
+        _regCount--;
+    }
+
+    int getRegCount() const {
+        return _regCount;
+    }
 
     /**
-     * @return direccion del primer bloque del archivo
+     * @brief getDisk
+     * @return
      */
-    BlockDirection* getDirection();
+    std::string getDisk() const {
+        return _diskID;
+    }
 
     /**
-     * @param pDirection direccion del primer bloque del archivo
+     * @brief setDisk
+     * @param pDisk
      */
-    void setStartBlock(BlockDirection* pDirection);
-    
-    std::string getName();
-    
-    int getBlockSize();
-    
-    RegisterBuffer * getFileMetadata();
-    
-    DataBuffer * getFileData(RegisterBuffer * pMetadatos);
-	
-	void apendReg(DataNode* pData);
-	
-	short writeReg(int pRegisterNumber, DataNode* pData);
+    void setDisk(std::string pDisk){
+        _diskID = pDisk;
+    }
 
-	void createFile(RegisterBuffer* pBuffer);
+    /**
+     * @brief getPointer
+     * @return
+     */
+    int getStartBlock() const{
+        return _startBlock;
+    }
 
-	DataNode* readReg(pRegisterNumber);	
-	
-	void eraseReg(pRegisterNumber);
-
-    /** INHERITANCE FROM COMPARABLE **/
-
-    bool eql(Comparable* arg);
-    bool gtr(Comparable* arg);
-    bool lss(Comparable* arg);
-    void print();
-
+    /**
+     * @brief setPointer
+     * @param pPointer
+     */
+    void setStartBlock(int pBlock){
+        _startBlock = pBlock;
+    }
 };
 
 #endif // IFILE_H

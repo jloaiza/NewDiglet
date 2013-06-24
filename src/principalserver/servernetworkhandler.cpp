@@ -1,8 +1,8 @@
 
 #include "servernetworkhandler.h"
 #include "serveroperations.h"
-#include "tokenizer.h"
-#include "constants.h"
+#include "../tokenizer/tokenizer.h"
+#include "../include/constants.h"
 #include <exception>
 
 #include <iostream>
@@ -10,10 +10,9 @@
 void ServerNetworkHandler::inMessage(std::string pMessage, int pSocket){
 	pMessage = Tokenizer::cleanEntry(pMessage);
 	std::string command = Tokenizer::getCommandSpace(pMessage, 1);
-	if (_sessionID == -1 && command != "connect" && command != "adduser"){
+	if (_sessionID == -1 && command != "connect" && command != "adduser" && command != "close"){
 		outMessage("?Error: No se ha inciado sesión\n", pSocket);
 	} else {
-
 		std::string param = Tokenizer::getParameters(pMessage);
 		std::cout<<param<<std::endl;
 		if (command == "get"){
@@ -204,7 +203,7 @@ void ServerNetworkHandler::appendReg(std::string pParameters, int pSocket){
 }
 
 void ServerNetworkHandler::delActualReg(int pSocket){
-	outMessageValidate(ServerOperations::delReg(_sessionID, SEEK_POS), pSocket);
+	outMessageValidate(ServerOperations::delReg(_sessionID, PS::SEEK_POS), pSocket);
 }
 
 void ServerNetworkHandler::delReg(std::string pParameters, int pSocket){
@@ -224,7 +223,7 @@ void ServerNetworkHandler::write(std::string pParameters, int pSocket){
 
 		if (Tokenizer::getCommandSpace(pParameters, 2) == ""){
 
-			outMessageValidate(ServerOperations::write(_sessionID, data, SEEK_POS), pSocket);
+			outMessageValidate(ServerOperations::write(_sessionID, data, PS::SEEK_POS), pSocket);
 
 		} else {
 
@@ -258,12 +257,12 @@ void ServerNetworkHandler::addReg(std::string pParameters, int pSocket){
 		outMessage("?Error: El comando 'addReg' espera un parametro\n", pSocket);
 	} else {
 		std::string data = Tokenizer::getCommandSpace(pParameters, 1);
-		outMessageValidate(ServerOperations::write(_sessionID, data, SEEK_POS), pSocket);
+		outMessageValidate(ServerOperations::write(_sessionID, data, PS::SEEK_POS), pSocket);
 	}
 }
 
 void ServerNetworkHandler::readActual(int pSocket){
-	outMessageValidate(ServerOperations::readReg(_sessionID, SEEK_POS), pSocket);
+	outMessageValidate(ServerOperations::readReg(_sessionID, PS::SEEK_POS), pSocket);
 }
 
 void ServerNetworkHandler::readRegister(std::string pParameters, int pSocket){
@@ -284,10 +283,4 @@ void ServerNetworkHandler::close(int pSocket){
 	if (_sessionID == -1){
 		disconnectClient();
 	}
-}
-
-int main(){
-	ServerNetworkHandler* server = new ServerNetworkHandler();
-	server->start();
-	return 0;
 }

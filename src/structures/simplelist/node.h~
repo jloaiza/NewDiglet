@@ -2,7 +2,7 @@
 #ifndef NODE_H
 #define NODE_H
 
-#include "../include/comparable.h"
+#include "../util/comparable.h"
 
 class Node {
 

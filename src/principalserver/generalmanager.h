@@ -1,14 +1,12 @@
 #ifndef GENERALMANAGER
 #define GENERALMANAGER
 
-<<<<<<< HEAD
 #include "../structures/avltree/avltree.h"
-=======
 #include "diskgroup.h"
-#include "avltree/avltree.h"
->>>>>>> refs/heads/new-binaries-implementation
+#include "../structures/avltree/avltree.h"
 #include "servernetworkhandler.h"
-#include "serverconsole.h"
+#include "storageclient.h"
+//#include "serverconsole.h"
 #include "diskgroup.h"
 #include "session.h"
 #include "user.h"
@@ -16,8 +14,7 @@
 #include "user.h"
 
 #include <string>
-
-class StorageClient; //Esta clase aún no ha sido implementada. Cuando se encuentre lista, se debe quitar esta linea y hacer un include
+class ServerConsole;
 
 class GeneralManager{
 	
@@ -51,12 +48,12 @@ private:
 
 	void saveDiskGroups(); 
 	void saveClients();	
-	void saveDisk();
+	void saveDisks();
 	void saveUsers();
 
 	void saveDiskGroupsAux(TreeNode<DiskGroup>* pNode);
 	void saveClientsAux(TreeNode<StorageClient>* pNode);	
-	void saveDiskAux(TreeNode<Disk>* pNode);
+	void saveDisksAux(TreeNode<Disk>* pNode);
 	void saveUsersAux(TreeNode<User>* pNode);
 
 	ServerNetworkHandler* _server; 						//Server para usuarios finales
@@ -64,12 +61,8 @@ private:
 	AVLTree<DiskGroup, std::string>* _diskGroups; 		//Árbol que contiene los grupos de discos
 	AVLTree<StorageClient, std::string>* _clientsTree; 	//Árbol utilizado para almacenar los clientes a los LSS
 	AVLTree<Session, int>* _sessions;					//Árbol que contiene las sesiones actuales
-<<<<<<< HEAD
-	AVLTree<Disk, int>* _diskTree;						//Árbol que contiene los discos 
-=======
 	AVLTree<Disk, std::string>* _diskTree;				//Árbol que contiene los discos 
->>>>>>> refs/heads/new-binaries-implementation
-	AVLTree<User, std::string>* _userTree;				//Árbol con que contiene a los usuarios
+	AVLTree<User, std::string>* _userTree;				//Árbol que contiene los discos 
 };
 
 #endif /* GENERALMANAGER */

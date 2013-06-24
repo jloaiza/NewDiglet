@@ -1,3 +1,6 @@
+#ifndef CLIENTSXML
+#define CLIENTSXML
+
 #include "parserxml.h"
 
 class clientsxml
@@ -10,3 +13,7 @@ public:
 	static std::string getClientPort(std::string pDocumentDirection, int pClientIndex);
 	static std::string getClientDates(std::string pDocumentDirection, int pClientIndex);
 };
+
+
+
+#endif /* CLIENTSXML */

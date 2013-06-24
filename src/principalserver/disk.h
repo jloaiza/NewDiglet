@@ -2,7 +2,6 @@
 #define DISK
 
 #include <string>
-#include "storageclient.h"
 
 class StorageClient;
 
@@ -20,6 +19,13 @@ public:
 	bool operator<(std::string& pDisk);
 	bool operator<=(std::string& pDisk);
 
+	bool operator==(short& pDisk);
+	bool operator!=(short& pDisk);
+	bool operator>(short& pDisk);
+	bool operator>=(short& pDisk);
+	bool operator<(short& pDisk);
+	bool operator<=(short& pDisk);
+
 	bool operator==(Disk& pDisk);
 	bool operator!=(Disk& pDisk);
 	bool operator>(Disk& pDisk);
@@ -33,9 +39,7 @@ public:
 		return _id;
 	}
 
-	std::string getDiskDirection() const {
-		return _storageClient->getIP() + std::string(":") + std::to_string(_id);
-	}
+	std::string getDiskDirection();
 
 	bool isAlive();
 	std::string readBlock(int pBlock);

@@ -1,3 +1,6 @@
+#ifndef USERXML
+#define USERXML
+
 #include "parserxml.h"
 
 class usersxml
@@ -11,3 +14,6 @@ public:
 	static std::string getIdUser(std::string pDocumentDirection, int pUserIndex);
 	static std::string getUserDates(std::string pDocumentDirection, int pUserIndex);
 };
+
+
+#endif /* USERXML */

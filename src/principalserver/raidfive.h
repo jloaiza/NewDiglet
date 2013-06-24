@@ -1,13 +1,13 @@
-#ifndef NORAID
-#define NORAID
+#ifndef RAIDFIVE
+#define RAIDFIVE
 
 #include "diskgroup.h"
 
-class NoRaid : public DiskGroup{
+class RaidFive : public DiskGroup{
 public:
 
-	NoRaid(std::string pID, int pBlockSize);
-	NoRaid(std::string pID, int pBlockSize, int pMaxSize, bool pFunctional, bool pWorking);
+	RaidFive(std::string pID, int pBlockSize);
+	RaidFive(std::string pID, int pBlockSize, int pMaxSize, bool pFunctional, bool pWorking);
 
 	void startDiskGroup();
 	
@@ -39,4 +39,4 @@ private:
 
 };
 
-#endif /* NORAID */
+#endif /* RAIDFIVE */

@@ -1,3 +1,6 @@
+#ifndef DISKXML
+#define DISKXML
+
 #include "parserxml.h"
 
 class DiskXML
@@ -12,3 +15,5 @@ public:
 	static std::string getClientDisk(std::string pDocumentDirection, int pDiskIndex);
 	static std::string getDiskDates(std::string pDocumentDirection, int pDiskIndex);
 };
+
+#endif /* DISKXML */

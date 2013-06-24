@@ -1,6 +1,8 @@
 #ifndef USER
 #define USER
 
+#include <string>
+
 class User{
 private:
 	std::string _name;
@@ -18,6 +20,13 @@ public:
 	bool operator>=(std::string& pUser);
 	bool operator<(std::string& pUser);
 	bool operator<=(std::string& pUser);
+
+	bool operator==(User& pUser);
+	bool operator!=(User& pUser);
+	bool operator>(User& pUser);
+	bool operator>=(User& pUser);
+	bool operator<(User& pUser);
+	bool operator<=(User& pUser);
 
 
 	std::string getName() const {
