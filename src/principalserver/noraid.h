@@ -7,23 +7,14 @@ class nTree;
 
 class NoRaid : public DiskGroup
 {
-private:
-
-	short _ID;
-	int _BlockSize, _NumDisks;
-	DataBuffer* _outBuffer;
-	bool _Functional, _Working
-	SimpleList * _diskList;
-
-	void eraseFile(iFile* pFile);
 
 public:
 
 	/* operaciones sobre el arbol n-ario */
 
-	DataNode * getFile(iFile pFile);
+	DataNode * getFile(iFile* pFile);
 	void deleteFile(nTreeNode* pNode);
-	nTreeNode * createFile(std::string pName, pRegisterList pRegister, std::string pUser);
+	nTreeNode * createFile(nTreeNode* pNode,  std::string pName, pRegisterList pRegister, std::string pUser);
 	nTreeNode* getNode(std::string pRelativePath, nTreeNode* pNode);
 
 	/* operaciones sobre el registros */
@@ -37,14 +28,10 @@ public:
 	/* operaciones administrativas */
 
 	format();
-	std::string getID();
-	int getBlockSize();
-	bool isWorking();
-	bool isFunctional();
 
 	/* operaciones sobre discos */
 
-	SimpleList* getDiskList();
+	DoubleLinkedList<Disk>* getDiskList();
 	void addDisk(Disk* pDisk);
 	void removeDisk(std::string pIP, std::string pID);
 	void setBlockSize(int pSize);

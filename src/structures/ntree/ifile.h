@@ -58,8 +58,10 @@ public:
 	short writeReg(int pRegisterNumber, DataNode* pData);
 
 	void createFile(RegisterBuffer* pBuffer);
+
+	DataNode* readReg(pRegisterNumber);	
 	
-	
+	void eraseReg(pRegisterNumber);
 
     /** INHERITANCE FROM COMPARABLE **/
 

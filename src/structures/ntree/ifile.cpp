@@ -98,7 +98,6 @@ iFile::iFile(std::string pName, BlockDirection * pDirection, int pBlockSize, Lss
 	_LastRegister = 0;
 }
 
-
 BlockDirection* iFile::getDirection()
 {
 	return _FirstBlock;
@@ -324,27 +323,25 @@ void iFile::createFile(RegisterBuffer* pBuffer)
 
 /** COMPARABLE INHERITANCE **/
 
-bool iFile::eql(Comparable* arg){
-
+bool iFile::eql(Comparable* arg)
+{
     /** TODO **/
     return false;
-
 }
 
-bool iFile::gtr(Comparable *arg){
-
+bool iFile::gtr(Comparable *arg)
+{
     /** TODO **/
     return false;
-
 }
 
-bool iFile::lss(Comparable *arg){
-
+bool iFile::lss(Comparable *arg)
+{
     /** TODO **/
     return false;
-
 }
 
-void iFile::print(){
+void iFile::print()
+{
     /** TODO **/
 }
