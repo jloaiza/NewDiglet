@@ -64,8 +64,7 @@ public:
 	 */
 	virtual nTreeNode* createFile(nTreeNode* pActual, std::string pName, RegisterSpace* pRegister, std::string pUser) = 0;	
 	
-	/* operaciones sobre el registros */
-	
+	/* operaciones sobre el registros */	
 	
 	/**
 	 * agrega un registro al final (despues del ultimo registro almacenado)
