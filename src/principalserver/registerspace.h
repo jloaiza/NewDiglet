@@ -15,6 +15,7 @@ public:
 	RegisterSpace(std::string pName, int pSize, int pType);
 	std::string getName();
 	int getSize();
+	int totalLength();
 	int getType();
 	RegisterSpace * getNext();
 	void setNext (RegisterSpace * pRegisterSpace);

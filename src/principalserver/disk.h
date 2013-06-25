@@ -43,7 +43,7 @@ public:
 
 	bool isAlive();
 	std::string readBlock(int pBlock);
-	int writeBlock(std::string pData, int pBlock);
+	int writeBlock(std::string pData);
 	void writeBytes(int pBlock, int pOffset, int pSize, std::string pData);
 	std::string readBytes(int pBlock, int pOffset, int pSize);
 };

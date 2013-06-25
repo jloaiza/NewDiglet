@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <termios.h>
+#include <unistd.h>
 
 void echo(bool pON);
 
@@ -37,7 +38,7 @@ void LssConsole::run(){
 	while (_onRun)
 	{
 		int clave = 0;
-		std::cout << "maikol@wander15-> ";
+		std::cout << ">> ";
 		std::cin >> clave;
 		
 		try
@@ -55,6 +56,7 @@ void LssConsole::run(){
 				std::cout << std::endl;
 				echo(true);
 				secKey = md5(secKey);
+				std::cout<<secKey<<std::endl;
 
 				_diskManager->createDisk(fileSize, secKey);
 			}
@@ -85,21 +87,12 @@ void LssConsole::run(){
 		
 			else if (clave == 4)
 			{
-				//_diskManager->saveDisks();
-			}
-			
-			else if (clave == 5)
-			{
-				char * fileName;
-				std::cout << NAME2;
-				std::cin >> fileName;
-				//_diskManager->loadDisks();
+				_diskManager->saveDisks();
 			}
 		
-			else if (clave == 6)
+			else if (clave == 5)
 			{
-				_onRun = false;
-				LssConsole::stop();
+				_diskManager->stopSystem();
 			}
 			
 			else
@@ -117,6 +110,6 @@ void LssConsole::run(){
 
 void LssConsole::title(){
 	std::cout << lssmenuL << "\n" << lssmenuS << "\n" << lssmenu3 << "\n" << lssmenu4 << "\n";
-	std::cout << lssmenu5 << "\n" << lssmenu6 << "\n" << lssmenu7 << "\n" << lssmenu8 << "\n";
-	std::cout << lssmenu9 << "\n" << lssmenuS << "\n" << lssmenuL << "\n";
+	std::cout << lssmenu5 << "\n" << lssmenu6 << "\n" << lssmenu7 << "\n";
+	std::cout << lssmenu8 << "\n" << lssmenuS << "\n" << lssmenuL << "\n";
 }

@@ -2,6 +2,7 @@
 #define RAIDONE
 
 #include "diskgroup.h"
+#include "../structures/doublelinkedlist/listnode.h"
 
 class RaidOne : public DiskGroup{
 public:
@@ -31,12 +32,21 @@ public:
 
 	void format();
 
-	std::string toBinario(DataNode* pData);
-
 private:
-	
-	void eraseFile(iFile* pFile);
 
+	static const int FILENAME_SIZE = 75;
+	static const int AUTHOR_SIZE = 25;
+	static const int FDATA_SIZE = 4;
+	static const int REGS_SIZE = 2;
+	static const int REGISTER_SIZE = 27;
+	static const int REGCOL_SIZE = 25;
+	static const int REGTYPE_SIZE = 1;
+	static const int REGCOLSIZE_SIZE = 1;
+	static const int BLOCKNEXT_SIZE = 10;
+
+	ListNode<Disk>* _currentDisk;
+
+	void eraseFile(iFile* pFile);
 
 };
 

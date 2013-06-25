@@ -5,6 +5,7 @@
 #include "../xml/diskxml.h"
 #include "../xml/usersxml.h"
 #include "../tokenizer/tokenizer.h"
+#include "serverconsole.h"
 #include "noraid.h"
 #include "raidzero.h"
 #include "raidone.h"
@@ -16,7 +17,7 @@ GeneralManager::GeneralManager(){
 	_instance = this;
 
 	_server = new ServerNetworkHandler();
-	//_console = new ServerConsole(this);
+	_console = new ServerConsole(this);
 
 	_sessions = new AVLTree<Session, int>();
 	_userTree = new AVLTree<User, std::string>;
@@ -28,7 +29,7 @@ GeneralManager::GeneralManager(){
 std::string GeneralManager::getDiskGroupStatus(std::string pDiskGroupID){
 	DiskGroup* disk = _diskGroups->search( &pDiskGroupID );
 	if (disk == 0){
-		return "Disco no encontrado.\n"
+		return "Disco no encontrado.\n";
 	}
 	std::string isWorking = disk->isWorking()?"true":"false";
 	std::string isFunctional = disk->isFunctional()?"true":"false";
@@ -37,24 +38,25 @@ std::string GeneralManager::getDiskGroupStatus(std::string pDiskGroupID){
 	return message;
 }
 
-std::string GeneralManager::getDiskGroupsAux(TreeNode<Disk>* pNode){
+std::string GeneralManager::getDiskGroupsAux(TreeNode<DiskGroup>* pNode){
 	if (pNode == 0){
 		return "";
 	}
-	std::string message;
-	message += getDiskGroups(pNode->getLeftChild());
+	std::string message = "";
+	message += getDiskGroupsAux(pNode->getLeftChild());
 
 	DiskGroup* disk = pNode->getData();
 	std::string isWorking = disk->isWorking()?"true":"false";
 	std::string isFunctional = disk->isFunctional()?"true":"false";
-	message += std::string("Disk ID: ") + pDiskGroupID + std::string(" working: ") + isWorking + std::string(" functional:") + isFunctional + std::string("\n");
-	
-	message += getDiskGroups(pNode->getRightChild());
+	message += std::string("Disk ID: ") + disk->getID() + std::string(" working: ") + isWorking + std::string(" functional:") + isFunctional + std::string("\n");
+	message += "\n";
+
+	message += getDiskGroupsAux(pNode->getRightChild());
 	return message;
 }
 
 std::string GeneralManager::getDiskGroups(){
-	getDiskGroupsAux(_diskGroups->getRoot());
+	return getDiskGroupsAux(_diskGroups->getRoot());
 }
 
 Session* GeneralManager::getSession(int pSessionID){
@@ -325,9 +327,9 @@ void GeneralManager::startSystem(){
 	loadUsers();
 	std::cout<<"users loaded"<<std::endl;
 
-	//_console->start();
+	_console->start();
 	_server->start();
-	//_console->getThread()->join();
+	_console->getThread()->join();
 	_server->getThread()->join();
 }
 
@@ -337,6 +339,6 @@ void GeneralManager::stopSystem(){
 	saveDiskGroups();
 	saveUsers();
 
-	//_console->stop();
+	_console->stop();
 	_server->closeServer();
 }

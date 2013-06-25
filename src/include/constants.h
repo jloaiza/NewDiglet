@@ -10,18 +10,20 @@ static const short INT    = 4;
 static const short DOUBLE = 5;
 static const short STRING = 6;
 
-static const std::string prinmenuL   =    "** * * * * * * * * * * * * * * * * * * * * *";
-static const std::string prinmenuS   =    "*                                          *";
-static const std::string prinmenuT   =    "*      Seleccione la operacion:            *";
-static const std::string prinmenu1   =    "*        1. Agregar disco                  *";
-static const std::string prinmenu2   =    "*        2. Borrar disco                   *";
-static const std::string prinmenu3   =    "*        3. Crear DiskGroup                *";
-static const std::string prinmenu4   =    "*        4. Borrar DiskGroup               *";
-static const std::string prinmenu5   =    "*        5. Mostrar DiskGroups actuales    *";
-static const std::string prinmenu6   =    "*        6. Mostrar DiskGroup específico   *";
-static const std::string prinmenu7   =    "*        7. Iniciar DiskGroup              *";
-static const std::string prinmenu8   =    "*        8. Detener DiskGroup              *";
-static const std::string prinmenu9   =    "*        9. Salir                          *";
+static const std::string prinmenuL   =    "** * * * * * * * * * * * * * * * * * * * * * * * *";
+static const std::string prinmenuW1  =    "*  Bienvenido,                                   *";
+static const std::string prinmenuW2  =    "*  Consola de administración de PrincipalServer; *";
+static const std::string prinmenuS   =    "*                                                *";
+static const std::string prinmenuT   =    "*      Seleccione la operacion:                  *";
+static const std::string prinmenu1   =    "*        1. Agregar disco                        *";
+static const std::string prinmenu2   =    "*        2. Borrar disco                         *";
+static const std::string prinmenu3   =    "*        3. Crear DiskGroup                      *";
+static const std::string prinmenu4   =    "*        4. Borrar DiskGroup                     *";
+static const std::string prinmenu5   =    "*        5. Mostrar DiskGroups actuales          *";
+static const std::string prinmenu6   =    "*        6. Mostrar DiskGroup específico         *";
+static const std::string prinmenu7   =    "*        7. Iniciar DiskGroup                    *";
+static const std::string prinmenu8   =    "*        8. Detener DiskGroup                    *";
+static const std::string prinmenu9   =    "*        9. Salir                                *";
 
 static const std::string NAME = "nombre del disco (archivo real): ";
 static const std::string NAME2 = "nombre del xml: ";
@@ -46,6 +48,18 @@ static const int S41 = 6;
 static const int S42 = 10;
 static const int S43 = 15;
 static const int S44 = 21;
+
+namespace PSC{
+	static const int ADD_DISK = 1;
+	static const int ERASE_DISK = 2;
+	static const int CREATE_DISKGROUP = 3;
+	static const int ERASE_DISKGROUP = 4;
+	static const int SHOW_DISKGROUPS = 5;
+	static const int SHOW_SPEC_DISKGROUP = 6;
+	static const int START_DISKGROUP = 7;
+	static const int STOP_DISKGROUP = 8;
+	static const int EXIT = 9;
+}
 
 namespace PS
 {  

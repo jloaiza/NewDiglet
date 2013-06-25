@@ -5,6 +5,9 @@
 #include <exception>
 #include <cstdlib>
 
+LSSNetworkHandler::LSSNetworkHandler(){
+	
+}
 
 void LSSNetworkHandler::inMessage(std::string pMessage, int pSocket){
 	std::string command = Tokenizer::getCommandSpace(pMessage, 1);
@@ -13,8 +16,8 @@ void LSSNetworkHandler::inMessage(std::string pMessage, int pSocket){
 	if (command == "connect"){
 		connect(pSocket, param);
 
-	} else if (command == "getFreeBlock"){
-		getFreeBlock(pSocket, param);
+	} else if (command == "startClient"){
+		outMessage( std::to_string(LssOperations::newSession()) , pSocket);
 
 	} else if (command == "readBlock"){
 		readBlock(pSocket, param);
@@ -22,9 +25,6 @@ void LSSNetworkHandler::inMessage(std::string pMessage, int pSocket){
 	} else if (command == "writeBlock"){
 		writeBlock(pSocket, param);
 
-	} else if (command == "getLssList"){
-		getLssList(pSocket);
-	
 	} else if (command == "getSize"){
 		getSize(pSocket, param);
 	
@@ -42,35 +42,27 @@ void LSSNetworkHandler::inMessage(std::string pMessage, int pSocket){
 
 void LSSNetworkHandler::connect(int pSocket, std::string pParam){
 	try {
-		short diskID = stoi(Tokenizer::getCommandSpace(pParam, 1));
-		std::string secKey = Tokenizer::getCommandSpace(pParam, 2);
+
+		int sessionID = stoi(Tokenizer::getCommandSpace(pParam, 1));
+		short diskID = stoi(Tokenizer::getCommandSpace(pParam, 2));
+		std::string secKey = Tokenizer::getCommandSpace(pParam, 3);
 		if (secKey == ""){
 			outMessage("?Error: El comando 'connect' espera dos atributos\n", pSocket);
 		} else {
-			outMessage(LssOperations::connect(diskID, secKey, _lssList, _manager), pSocket);
+			outMessage(LssOperations::connect(diskID, secKey, sessionID), pSocket);
 		}
 	} catch (std::exception e){
-		outMessage("?Error: El primer paremetro debe ser un número\n", pSocket);
-	}
-}
-
-void LSSNetworkHandler::getFreeBlock(int pSocket, std::string pParam){
-	try {
-		short diskID = stoi(Tokenizer::getCommandSpace(pParam, 1));
-		
-		outMessage(LssOperations::getFreeBlock(diskID, _lssList), pSocket);
-
-	} catch (std::exception e){
-		outMessage("?Error: Error de tipo, algunos parametros debe ser números\n", pSocket);
+		outMessage("?Error: El primer y segundo paremetro debe ser un número\n", pSocket);
 	}
 }
 
 void LSSNetworkHandler::readBlock(int pSocket, std::string pParam){
 	try {
-		short diskID = stoi(Tokenizer::getCommandSpace(pParam, 1));
-		int block = stoi(Tokenizer::getCommandSpace(pParam, 2));
+		int sessionID = stoi(Tokenizer::getCommandSpace(pParam, 1));
+		short diskID = stoi(Tokenizer::getCommandSpace(pParam, 2));
+		int block = stoi(Tokenizer::getCommandSpace(pParam, 3));
 
-		outMessage(LssOperations::readBlock(diskID, block, _lssList), pSocket);
+		outMessage(LssOperations::readBlock(diskID, block, sessionID), pSocket);
 
 	} catch (std::exception e){
 		outMessage("?Error: Error de tipo, algunos parametros debe ser números\n", pSocket);
@@ -79,29 +71,24 @@ void LSSNetworkHandler::readBlock(int pSocket, std::string pParam){
 
 void LSSNetworkHandler::writeBlock(int pSocket, std::string pParam){
 	try {
-		short diskID = stoi(Tokenizer::getCommandSpace(pParam, 1));
-		int block = stoi(Tokenizer::getCommandSpace(pParam, 2));
-		std::string data = Tokenizer::getCommandSpace(pParam, 3);
+		int sessionID = stoi(Tokenizer::getCommandSpace(pParam, 1));
+		short diskID = stoi(Tokenizer::getCommandSpace(pParam, 2);
+		std::string data = pParam.substr(pParam.find(' ')+1, pParam.length() - pParam.find(' '));
 		if (data == ""){
-			outMessage("?Error: El comando 'writeBlock' espera tres atributos\n", pSocket);
+			outMessage("?Error: El comando 'writeBlock' espera dos atributos\n", pSocket);
 		} else {
-			outMessage(LssOperations::writeBlock(diskID, block, data, _lssList), pSocket);
+			outMessage(LssOperations::writeBlock(diskID, data, sessionID), pSocket);
 		}
 	} catch (std::exception e){
 		outMessage("?Error: El primer paremetro debe ser un número\n", pSocket);
 	}
 }
 
-void LSSNetworkHandler::getLssList(int pSocket){
-	
-	outMessage(LssOperations::getLssList(_manager), pSocket);
-	
-}
-
 void LSSNetworkHandler::getSize(int pSocket, std::string pParam){
 	try {
-		short diskID = stoi(Tokenizer::getCommandSpace(pParam, 1));
-		outMessage(LssOperations::getSize(diskID, _manager), pSocket);
+		int sessionID = stoi(Tokenizer::getCommandSpace(pParam, 1));
+		short diskID = stoi(Tokenizer::getCommandSpace(pParam, 2));
+		outMessage(LssOperations::getSize(diskID, sessionID), pSocket);
 
 	} catch (std::exception e){
 		outMessage("?Error: El paremetro debe ser un número\n", pSocket);
@@ -110,15 +97,16 @@ void LSSNetworkHandler::getSize(int pSocket, std::string pParam){
 
 void LSSNetworkHandler::writeBytes(int pSocket, std::string pParam){
 	try {
-		short diskID = stoi(Tokenizer::getCommandSpace(pParam, 1));
-		int block = stoi(Tokenizer::getCommandSpace(pParam, 2));
-		int offset = stoi(Tokenizer::getCommandSpace(pParam, 3));
-		int size = stoi(Tokenizer::getCommandSpace(pParam, 4));
-		std::string data = Tokenizer::getCommandSpace(pParam, 5);
+		int sessionID = stoi(Tokenizer::getCommandSpace(pParam, 1));
+		short diskID = stoi(Tokenizer::getCommandSpace(pParam, 2));
+		int block = stoi(Tokenizer::getCommandSpace(pParam, 3));
+		int offset = stoi(Tokenizer::getCommandSpace(pParam, 4));
+		int size = stoi(Tokenizer::getCommandSpace(pParam, 5));
+		std::string data = Tokenizer::getCommandSpace(pParam, 6);
 		if (data == ""){
 			outMessage("?Error: El comando 'writeBytes' espera cuatro atributos\n", pSocket);
 		} else {
-			outMessage(LssOperations::writeBytes(diskID, block, offset, size, data, _lssList), pSocket);
+			outMessage(LssOperations::writeBytes(diskID, block, offset, size, data, sessionID), pSocket);
 		}
 	} catch (std::exception e){
 		outMessage("?Error: Error de tipo, algunos parametros debe ser números\n", pSocket);
@@ -127,13 +115,13 @@ void LSSNetworkHandler::writeBytes(int pSocket, std::string pParam){
 
 void LSSNetworkHandler::readBytes(int pSocket, std::string pParam){
 	try {
+		int sessionID = stoi(Tokenizer::getCommandSpace(pParam, 1));
+		short diskID = stoi(Tokenizer::getCommandSpace(pParam, 2));
+		int block = stoi(Tokenizer::getCommandSpace(pParam, 3));
+		int offset = stoi(Tokenizer::getCommandSpace(pParam, 4));
+		int size = stoi(Tokenizer::getCommandSpace(pParam, 5));
 
-		short diskID = stoi(Tokenizer::getCommandSpace(pParam, 1));
-		int block = stoi(Tokenizer::getCommandSpace(pParam, 2));
-		int offset = stoi(Tokenizer::getCommandSpace(pParam, 3));
-		int size = stoi(Tokenizer::getCommandSpace(pParam, 4));
-
-		outMessage(LssOperations::readBytes(diskID, block, offset, size, _lssList), pSocket);
+		outMessage(LssOperations::readBytes(diskID, block, offset, size, sessionID), pSocket);
 
 	} catch (std::exception e){
 		outMessage("?Error: Error de tipo, algunos parametros debe ser números\n", pSocket);

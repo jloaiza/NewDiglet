@@ -1,7 +1,13 @@
 #include "raidzero.h"
 
 RaidZero::RaidZero(std::string pID, int pBlockSize){
-	
+	_id = pID;
+	_blockSize = pBlockSize;
+	_raid = 0;
+	_functional = false;
+	_working = false;
+	_files = new nTree();
+	_diskList = new DoubleLinkedList<Disk, std::string>();
 }
 
 RaidZero::RaidZero(std::string pID, int pBlockSize, int pMaxSize, bool pFunctional, bool pWorking){

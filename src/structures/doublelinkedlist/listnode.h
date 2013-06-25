@@ -8,6 +8,8 @@ public:
 
 	ListNode(t* pData){
 		_data = pData;
+		_next = 0;
+		_previous = 0;
 	}
 
 	t* getData() const{

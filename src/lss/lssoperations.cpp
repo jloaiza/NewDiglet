@@ -1,98 +1,79 @@
 #include "lssoperations.h"
+#include "lssmanager.h"
+#include "session.h"
+#include "lss.h"
 
-#include <cstdlib>
-#include <string>
-#include <cstring>
-
-#include <iostream>
-
-std::string LssOperations::getFreeBlock(short pID, DoubleLinkedList<Lss, short>* pDiskList){
-
-	Lss* lss = pDiskList->search(&pID);
-	
-	if (lss != 0){
-		return std::to_string(lss->getFreeBlock());
-	} else {
-		return "?Error: El disco no ha sido encontrado";
-	}
-
+int LssOperations::newSession(){
+	LssManager* manager = LssManager::getInstance();
+	return manager->newSession();
 }
 
-std::string LssOperations::connect(short pID, std::string pKey, DoubleLinkedList<Lss, short>* pDiskList, LssManager* pManager){
-
-	Lss* lss = pManager->getLSS(pID);
-
-	if (lss->getSecKey() != pKey){
-		return "?Error: Security key incorrecta";
-
-	} else if (lss != 0){
-		pDiskList->insertStart(lss);
-		return "";
-
+std::string LssOperations::getSize(short pID, int pSessionID){
+	LssManager* manager = LssManager::getInstance();
+	Session* session = manager->getSession(pSessionID);
+	Lss* lss = session->getLss(pID);
+	if (lss == 0){
+		return "?Error. El disco no ha sido encontrado\n";
 	} else {
-		return "?Error: El disco no ha sido encontrado";
-	}
-
-}
-
-std::string LssOperations::readBlock(short pID, int pBlock, DoubleLinkedList<Lss, short>* pDiskList){
-	Lss* toRead = pDiskList->search(&pID);
-	if (toRead != 0){
-		return toRead->readA (pBlock);
-	} else {
-		return "?Error: El disco no ha sido encontrado";
+		return std::to_string(lss->getDiskSize());
 	}
 }
 
-std::string LssOperations::writeBlock(short pID, int pBlock, std::string pData, DoubleLinkedList<Lss, short>* pDiskList){
-	Lss* toWrite = pDiskList->search(&pID);
-	if (toWrite != 0){
-		char* tmp;
-		strcpy(tmp, pData.data());
-		toWrite->writeA (tmp, pBlock);
-		return "";
+std::string LssOperations::connect(short pID, std::string pKey, int pSessionID){
+	LssManager* manager = LssManager::getInstance();
+	Lss* toAdd = manager->getLss(pID);
+	if (toAdd == 0){
+		return "?Error. El disco no ha sido encontrado\n";
+	}
+	if (toAdd->getSecKey() != pKey){
+		return "?Error. Security key incorrecta\n";
+	}
+	Session* session = manager->getSession(pSessionID);
+	if (toAdd->isBusy()){
+		return "?Error. El disco ya está en uso\n";
 	} else {
-		return "?Error: El disco no ha sido encontrado";
+		session->addLss(toAdd);
+		return "Connected.\n";
 	}
 }
 
-std::string LssOperations::writeBytes(short pID, int pBlock, int pOffset, int pSize, std::string pData, DoubleLinkedList<Lss, short>* pDiskList){
-	std::cout<<"H-1"<<std::endl;
-	Lss* toWrite = pDiskList->search(&pID);
-	std::cout<<"H-2"<<std::endl;
-	if (toWrite != 0){
-		char* tmp = new char[pData.length()];
-		strcpy(tmp, pData.data());
-		std::cout<<"H"<<std::endl;
-		short pPos = 12 + (pBlock*toWrite->getBlockSize()) + pOffset;		
-		toWrite->writeB (tmp, pPos, pSize);
-		return "";
-	} else {
-		return "?Error: El disco no ha sido encontrado";
+std::string LssOperations::readBlock(short pID, int pBlock, int pSessionID){
+	LssManager* manager = LssManager::getInstance();
+	Session* session = manager->getSession(pSessionID);
+	Lss* lss = session->getLss(pID);
+	if (lss == 0){
+		return "?Error. El disco no ha sido encontrado\n";
 	}
+	return lss->readA(pBlock);
 }
 
-std::string LssOperations::readBytes (short pID, int pBlock, int pOffset, int pSize, DoubleLinkedList<Lss, short>* pDiskList){
-	Lss* toRead = pDiskList->search(&pID);
-	if (toRead != 0){
-		short pPos = 12 + (pBlock*toRead->getBlockSize()) + pOffset;
-		return toRead->readB(pPos, pSize);
-	} else {
-		return "?Error: El disco no ha sido encontrado";
+std::string LssOperations::writeBlock(short pID, std::string pData, int pSessionID){
+	LssManager* manager = LssManager::getInstance();
+	Session* session = manager->getSession(pSessionID);
+	Lss* lss = session->getLss(pID);
+	if (lss == 0){
+		return "?Error. El disco no ha sido encontrado\n";
 	}
+	return lss->writeA(pData);
 }
 
-std::string LssOperations::getLssList(LssManager* pManager){
-	//return pManager->getLssList();
-	return "!Not implemented yet";
+std::string LssOperations::writeBytes(short pID, int pBlock, int pOffset, int pSize, std::string pData, int pSessionID){
+	LssManager* manager = LssManager::getInstance();
+	Session* session = manager->getSession(pSessionID);
+	Lss* lss = session->getLss(pID);
+	if (lss == 0){
+		return "?Error. El disco no ha sido encontrado\n";
+	}
+	lss->writeC(pData, pBlock, pOffset, pSize);
+	return "Wrote.";
 }
 
-std::string LssOperations::getSize(short pID, LssManager* pManager){
-	Lss* toGet = pManager->getLSS(pID);
-	if (toGet != 0){
-		//return toGet->getSize();
-		return "Not implemented yet";
-	} else {
-		return "?Error: El disco no ha sido encontrado";
+std::string LssOperations::readBytes (short pID, int pBlock, int pOffset, int pSize, int pSessionID){
+	LssManager* manager = LssManager::getInstance();
+	Session* session = manager->getSession(pSessionID);
+	Lss* lss = session->getLss(pID);
+	if (lss == 0){
+		return "?Error. El disco no ha sido encontrado\n";
 	}
+	return lss->readC(pBlock, pOffset, pSize);
 }

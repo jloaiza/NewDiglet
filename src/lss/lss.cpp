@@ -6,6 +6,10 @@
 #include "../binaryoperations/byteshandler.h"
 #include "lss.h"
 
+std::ostream& operator<<(std::ostream& out, Lss& pLss){
+	out << "ID: " << pLss.getID() << " Size: " << pLss.getDiskSize();
+	return out;
+}
 
 bool Lss::operator != (const short& pToCompare){
 	return _id != pToCompare;
@@ -31,6 +35,30 @@ bool Lss::operator >= (const short& pToCompare){
 	return _id >= pToCompare;
 }
 
+
+bool Lss::operator != (Lss& pToCompare){
+	return _id != pToCompare.getID();
+}
+
+bool Lss::operator == (Lss& pToCompare){
+	return _id == pToCompare.getID();
+}
+
+bool Lss::operator < (Lss& pToCompare){
+	return _id < pToCompare.getID();
+}
+
+bool Lss::operator <= (Lss& pToCompare){
+	return _id <= pToCompare.getID();
+}
+
+bool Lss::operator > (Lss& pToCompare){
+	return _id > pToCompare.getID();
+}
+
+bool Lss::operator >= (Lss& pToCompare){
+	return _id >= pToCompare.getID();
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 		PRIVATE		* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -72,13 +100,17 @@ char * Lss::string_2_charArray(std::string pString, short pSize)
 Lss::Lss(std::string pDisk, short pID, int pSize, std::string pSecKey)
 {
 	_disk = pDisk;
-	name = _disk;
 	_busy = false;
 	_id = pID;
 	_size = pSize;
 	_blockSize = 12;
 	_secKey = pSecKey;
 	header();
+}
+
+
+int Lss::getID(){
+	return _id;
 }
 
 short Lss::writeA (std::string pData)
@@ -118,6 +150,10 @@ short Lss::writeA (std::string pData)
 	return freeblock;		/* numero de bloque donde escribio los datos*/
 }
 
+void Lss::writeC(std::string pData, int pBlock, int pOffset, int pSize){
+	writeB(pData, (12+(pBlock*_blockSize))+pOffset, pSize);
+}
+
 void Lss::writeB (std::string pData, int pPos, int pSize)
 {
 	std::fstream File;
@@ -132,6 +168,10 @@ char * Lss::readA (int pBlock)
 	return readB ( (12+(pBlock*_blockSize)), _blockSize );
 }
 
+char * Lss::readC(int pBlock, int pOffset, int pSize){
+	return readB ( (12+(pBlock*_blockSize))+pOffset, pSize );
+}
+
 char * Lss::readB (int pPos, int pSize)
 {
 	char * buffer = new char [pSize];
@@ -141,6 +181,10 @@ char * Lss::readB (int pPos, int pSize)
 	File.read (buffer, pSize);
 	File.close();
 	return buffer;
+}
+
+bool Lss::isBusy(){
+	return _busy;
 }
 
 short Lss::getFreeBlock()
@@ -210,27 +254,4 @@ void Lss::eraseBlock(int pBlock)
 			}	
 		}
 	}
-}
-
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 		COMPARABLE		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-bool Lss::eql(Comparable* arg)
-{
-	return _id == ( (Lss*) arg )->_id;
-}
-
-bool Lss::gtr(Comparable* arg)
-{
-	return true;
-}
-
-bool Lss::lss(Comparable* arg)
-{
-	return true;
-}
-
-void Lss::print()
-{
-	std::cout << _id << "(" << _size << ")" << " - ";
 }

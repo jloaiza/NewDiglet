@@ -1,25 +1,19 @@
 
-#ifndef LssOPERATIONS
-#define LssOPERATIONS
+#ifndef LSSOPERATIONS
+#define LSSOPERATIONS
 
-#include "lss.h"
-#include "lssmanager.h"
-#include "../structures/doublelinkedlist/doublelinkedlist.h"
-
-class SimpleList;
+#include <string>
 
 class LssOperations {
 	
 public:
-	
-	static std::string getFreeBlock(short pID, DoubleLinkedList<Lss, short>* pDiskList);
-	static std::string getSize(short pID, LssManager* pManager);
-	static std::string connect(short pID, std::string pKey, DoubleLinkedList<Lss, short>* pDiskList, LssManager* pManager);
-	static std::string readBlock(short pID, int pBlock, DoubleLinkedList<Lss, short>* pDiskList);
-	static std::string writeBlock(short pID, int pBlock, std::string pData, DoubleLinkedList<Lss, short>* pDiskList);
-	static std::string writeBytes(short pID, int pBlock, int pOffset, int pSize, std::string pData, DoubleLinkedList<Lss, short>* pDiskList);
-	static std::string readBytes (short pID, int pBlock, int pOffset, int pSize, DoubleLinkedList<Lss, short>* pDiskList);
-	static std::string getLssList(LssManager* pManager);
+	static int newSession();
+	static std::string getSize(short pID, int pSessionID);
+	static std::string connect(short pID, std::string pKey, int pSessionID);
+	static std::string readBlock(short pID, int pBlock, int pSessionID);
+	static std::string writeBlock(short pID, std::string pData, int pSessionID);
+	static std::string writeBytes(short pID, int pBlock, int pOffset, int pSize, std::string pData, int pSessionID);
+	static std::string readBytes (short pID, int pBlock, int pOffset, int pSize, int pSessionID);
 
 };
 #endif

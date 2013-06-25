@@ -147,8 +147,13 @@ public:
 	
 	void removeDisk(std::string pIP, short pID);
 
+	void loadTree(std::string pTreePath);
 		
-	virtual std::string toBinario(DataNode* pData) = 0;
+	std::string toBinary(DataNode* pData);
+
+	DataNode* toDataNode(RegisterSpace* pRegister, int pColNameSize, int pTypeSize, int pDataSize);
+
+	ListNode<std::string>* getStrips(std::string pMessage, int pBlockSize);
 
 protected:
 	
@@ -156,6 +161,7 @@ protected:
 	nTree* _files;
 	int _raid;
 	int _blockSize;
+	int _maxSize;
 	bool _functional;
 	bool _working;
 	DoubleLinkedList<Disk, std::string>* _diskList;

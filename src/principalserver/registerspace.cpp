@@ -18,6 +18,15 @@ int RegisterSpace::getSize()
 	return _size;
 }
 
+int RegisterSpace::totalLength(){
+	int length = 0;
+	RegisterSpace* iSpace = this;
+	while(iSpace != 0){
+		length++;
+	}
+	return length;
+}
+
 int RegisterSpace::getType()
 {
 	return _type;

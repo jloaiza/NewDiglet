@@ -3,13 +3,14 @@
 
 #include "../include/comparable.h"
 #include <string>
+#include <ostream>
 
-class Lss : public Comparable {
+class Lss {
 	
 private:
 
 	std::string TWOPOINTS = ":";
-	std::string DIRECTION = "@";	
+	std::string DIRECTION = "@";
     std::string _disk;
 	bool _busy;
 	int _size;
@@ -59,17 +60,25 @@ public:
 	 */
 	char * readB (int pPos, int pSize);
 	
+	void writeC (std::string pData, int pBlock, int pOffset, int pSize);
+	
+	char* readC (int pBlock, int pOffset, int pSize);
+
 	/**
 	 * @return numero del bloque libre
 	 */
 	short getFreeBlock();
 	
+	bool isBusy();
+
 	short getLastBlock();
 	
 	int getBlockSize();
 	
 	int getDiskSize();
 	
+	int getID();
+
 	std::string getSecKey();
 	
 	/**
@@ -80,13 +89,7 @@ public:
 
 	
 	void eraseBlock(int pBlock);
-
-
 	
-	bool eql(Comparable* arg);
-	bool gtr(Comparable* arg);
-	bool lss(Comparable* arg);
-	void print();
 
 	bool operator != (const short& pToCompare);
 	bool operator == (const short& pToCompare);
@@ -94,6 +97,15 @@ public:
 	bool operator <= (const short& pToCompare);
 	bool operator > (const short& pToCompare);
 	bool operator >= (const short& pToCompare);
+
+	bool operator != (Lss& pToCompare);
+	bool operator == (Lss& pToCompare);
+	bool operator < (Lss& pToCompare);
+	bool operator <= (Lss& pToCompare);
+	bool operator > (Lss& pToCompare);
+	bool operator >= (Lss& pToCompare);
+
+	friend std::ostream& operator<<(std::ostream& out, Lss& pLss);
 
 };
 

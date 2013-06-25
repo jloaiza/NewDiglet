@@ -3,7 +3,6 @@
 #define SERVERCONSOLE
 
 #include <thread>
-#include "generalmanager.h"
 
 class GeneralManager;
 

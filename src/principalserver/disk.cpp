@@ -89,8 +89,8 @@ std::string Disk::readBlock(int pBlock){
 	return _storageClient->readBlock(_id, pBlock);
 }
 
-int Disk::writeBlock(std::string pData, int pBlock){
-	return (_storageClient->writeBlock(_id, pBlock, pData)==""?0:1);
+int Disk::writeBlock(std::string pData){
+	return _storageClient->writeBlock(_id, pData);
 }
 
 void Disk::writeBytes(int pBlock, int pOffset, int pSize, std::string pData){

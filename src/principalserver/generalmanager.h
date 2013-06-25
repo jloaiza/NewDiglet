@@ -6,7 +6,6 @@
 #include "../structures/avltree/avltree.h"
 #include "servernetworkhandler.h"
 #include "storageclient.h"
-//#include "serverconsole.h"
 #include "diskgroup.h"
 #include "session.h"
 #include "user.h"
@@ -29,10 +28,6 @@ public:
 	void addLSS(std::string pDiskGroupID, std::string pIPToConnect, int pPort, short pDiskID, std::string pSecurityKey);
 	void startDiskGroup(std::string pDiskGroupID);
 	void stopDiskGroup(std::string pDiskGroupID);
-
-	//Manager - en general
-	void startSystem();
-	void stopSystem();
 
 	//Operaciones con usuarios
 	Session* getSession(int pSessionID);
@@ -66,7 +61,7 @@ private:
 	void saveDisksAux(TreeNode<Disk>* pNode);
 	void saveUsersAux(TreeNode<User>* pNode);
 
-	std::string getDiskGroupsAux(TreeNode<Disk>* pNode);
+	std::string getDiskGroupsAux(TreeNode<DiskGroup>* pNode);
 
 	ServerNetworkHandler* _server; 						//Server para usuarios finales
 	ServerConsole* _console; 							//Consola del sistema para administración

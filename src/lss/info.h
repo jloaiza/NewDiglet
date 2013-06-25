@@ -10,8 +10,7 @@ std::string lssmenu4 = "*       1. Crear disco nuevo       *";
 std::string lssmenu5 = "*       2. Borrar disco            *";
 std::string lssmenu6 = "*       3. Mostrar discos          *";
 std::string lssmenu7 = "*       4. SAVE                    *";
-std::string lssmenu8 = "*       5. LOAD                    *";
-std::string lssmenu9 = "*       6. Salir                   *";
+std::string lssmenu8 = "*       5. Salir                   *";
 
 std::string NAME = "nombre del disco (archivo real): ";
 std::string NAME2 = "nombre del xml: ";
