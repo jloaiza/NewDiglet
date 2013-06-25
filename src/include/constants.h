@@ -10,15 +10,18 @@ static const short INT    = 4;
 static const short DOUBLE = 5;
 static const short STRING = 6;
 
-static const std::string lssmenuL = "** * * * * * * * * * * * * * * * * *";
-static const std::string lssmenuS = "*                                  *";
-static const std::string lssmenu3 = "*     seleccione la operacion:     *";
-static const std::string lssmenu4 = "*       1. Crear disco nuevo       *";
-static const std::string lssmenu5 = "*       2. Borrar disco            *";
-static const std::string lssmenu6 = "*       3. Mostrar discos          *";
-static const std::string lssmenu7 = "*       4. SAVE                    *";
-static const std::string lssmenu8 = "*       5. LOAD                    *";
-static const std::string lssmenu9 = "*       6. Salir                   *";
+static const std::string prinmenuL   =    "** * * * * * * * * * * * * * * * * * * * * *";
+static const std::string prinmenuS   =    "*                                          *";
+static const std::string prinmenuT   =    "*      Seleccione la operacion:            *";
+static const std::string prinmenu1   =    "*        1. Agregar disco                  *";
+static const std::string prinmenu2   =    "*        2. Borrar disco                   *";
+static const std::string prinmenu3   =    "*        3. Crear DiskGroup                *";
+static const std::string prinmenu4   =    "*        4. Borrar DiskGroup               *";
+static const std::string prinmenu5   =    "*        5. Mostrar DiskGroups actuales    *";
+static const std::string prinmenu6   =    "*        6. Mostrar DiskGroup específico   *";
+static const std::string prinmenu7   =    "*        7. Iniciar DiskGroup              *";
+static const std::string prinmenu8   =    "*        8. Detener DiskGroup              *";
+static const std::string prinmenu9   =    "*        9. Salir                          *";
 
 static const std::string NAME = "nombre del disco (archivo real): ";
 static const std::string NAME2 = "nombre del xml: ";

@@ -25,7 +25,16 @@ public:
 	}
 
 private:
+	void addDisk();
+	void removeDisk();
 	void createDiskGroup();
+	void removeDiskGroup();
+	void showDiskGroups();
+	void showSpecificDiskGroup();
+	void startDiskGroup();
+	void stopDiskGroup();
+	void exitSystem();
+
 	
 	static void callRun(ServerConsole* pConsole);
 	void run();

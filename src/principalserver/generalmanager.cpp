@@ -27,9 +27,34 @@ GeneralManager::GeneralManager(){
 
 std::string GeneralManager::getDiskGroupStatus(std::string pDiskGroupID){
 	DiskGroup* disk = _diskGroups->search( &pDiskGroupID );
+	if (disk == 0){
+		return "Disco no encontrado.\n"
+	}
 	std::string isWorking = disk->isWorking()?"true":"false";
 	std::string isFunctional = disk->isFunctional()?"true":"false";
-	return std::string("Disk ID: ") + pDiskGroupID + std::string(" working: ") + isWorking + std::string(" functional:") + isFunctional;
+	std::string message = std::string("Disk ID: ") + pDiskGroupID + std::string(" working: ") + isWorking + std::string(" functional:") + isFunctional + std::string("\n");
+	message += disk->getDiskList();
+	return message;
+}
+
+std::string GeneralManager::getDiskGroupsAux(TreeNode<Disk>* pNode){
+	if (pNode == 0){
+		return "";
+	}
+	std::string message;
+	message += getDiskGroups(pNode->getLeftChild());
+
+	DiskGroup* disk = pNode->getData();
+	std::string isWorking = disk->isWorking()?"true":"false";
+	std::string isFunctional = disk->isFunctional()?"true":"false";
+	message += std::string("Disk ID: ") + pDiskGroupID + std::string(" working: ") + isWorking + std::string(" functional:") + isFunctional + std::string("\n");
+	
+	message += getDiskGroups(pNode->getRightChild());
+	return message;
+}
+
+std::string GeneralManager::getDiskGroups(){
+	getDiskGroupsAux(_diskGroups->getRoot());
 }
 
 Session* GeneralManager::getSession(int pSessionID){
