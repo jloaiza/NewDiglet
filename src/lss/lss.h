@@ -35,7 +35,7 @@ public:
 	 * @return numero de bloque donde escribimos
 	 * @version 2.0 	se implemento para que busque un bloque libre, y retorne el numero de bloque que se utilizo
 	 */
-	short writeA (std::string pData, short pBlockPadre);
+	short writeA (std::string pData);
 	
 	/**
 	 * escribe cualquier cantidad de caracteres en cualquier posicion del LSS
@@ -49,7 +49,7 @@ public:
 	 * @param pBlock bloque que se va a leer
 	 * @return datos leidos
 	 */
-	char * readA (int pBlock);	
+	char * readA (int pBlock);
 	
 	/**
 	 * lee cualquier cantidad de caracteres en cualquier posicion del disco
