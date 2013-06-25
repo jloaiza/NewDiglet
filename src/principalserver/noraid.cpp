@@ -1,61 +1,92 @@
 #include "noraid.h"
 
-NoRaid::NoRaid(std::string pID, int pBlockSize){
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 		PRIVATE		* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+void NoRaid::eraseFile(iFile* pFile)
+{
+	
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 		PUBLIC		* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+NoRaid::NoRaid(std::string pID, int pBlockSize)
+{
 
 }
 
-NoRaid::NoRaid(std::string pID, int pBlockSize, int pMaxSize, bool pFunctional, bool pWorking){
+NoRaid::NoRaid(std::string pID, int pBlockSize, int pMaxSize, bool pFunctional, bool pWorking)
+{
 
 }
 
-void NoRaid::startDiskGroup(){
+/* operaciones sobre el arbol n-ario */
+
+DataNode * NoRaid::getFile(iFile* pFile)
+{
+	
+}
+
+void NoRaid::startDiskGroup()
+{
 
 }
 	
-void NoRaid::stopDiskGroup(){
+void NoRaid::stopDiskGroup()
+{
 
 }
 
-DataNode* NoRaid::getFile(iFile* pFile){
+void NoRaid::deleteFile(nTreeNode* pNode)
+{
+	iFile * temporal = pNode->getFile();
+	temporal->~iFile;
+	_files->erase(pNode);
+}
+
+nTreeNode * NoRaid::createFile(nTreeNode* pNode, std::string pName, RegisterBuffer* pRegister, std::string pUser)
+{
+	iFile * temporal = new iFile(pName, 0, _blockSize, 0);
+	temporal->createFile(pRegister);
+	_files->insert(temporal, pNode, pName, pUser, "");
+}
+
+/* operaciones sobre el registros */
+
+short NoRaid::apendReg(DataNode* pData, iFile* pFile)
+{
 
 }
 
-void NoRaid::deleteFile(nTreeNode* pNode){
+short NoRaid::writeReg(int pRegisterNumber, DataNode* pData, iFile* pFile)
+{
 
 }
 
-nTreeNode* NoRaid::createFile(nTreeNode* pActual, std::string pName, RegisterSpace* pRegister, std::string pUser){
+DataBuffer* NoRaid::readReg(int pRegisterNumber, iFile* pFile)
+{
 
 }
 
-short NoRaid::apendReg(DataNode* pData, iFile* pFile){
+void NoRaid::eraseReg(int pRegisterNumber, iFile* pFile)
+{
 
 }
 
-short NoRaid::writeReg(int pRegisterNumber, DataNode* pData, iFile* pFile){
+RegisterBuffer* NoRaid::getRegFormat(iFile* pFile)
+{
 
 }
 
-DataNode* NoRaid::readReg(int pRegisterNumber, iFile* pFile){
+/* operaciones administrativas */
 
+void NoRaid::format()
+{
+	
 }
 
-void NoRaid::eraseReg(int pRegisterNumber, iFile* pFile){
+/* operaciones sobre discos */
 
-}
-
-RegisterSpace* NoRaid::getRegFormat(iFile* pFile){
-
-}
-
-void NoRaid::format(){
-
-}
-
-std::string NoRaid::toBinario(DataNode* pData){
-
-}
-
-void NoRaid::eraseFile(iFile* pFile){
-
+std::string NoRaid::toBinario(DataNode* pData)
+{
+	
 }

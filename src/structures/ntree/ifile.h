@@ -15,12 +15,6 @@ private:
 
 public:
 
-    /**
-     * @brief iFile
-     * @param pName
-     * @param pDisk
-     * @param pPointer
-     */
     iFile(std::string pDisk, int pStartBlock){
         _regCount = 0;
         _startBlock = pStartBlock;
@@ -42,37 +36,22 @@ public:
         return _regCount;
     }
 
-    /**
-     * @brief getDisk
-     * @return
-     */
     std::string getDisk() const {
         return _diskID;
     }
 
-    /**
-     * @brief setDisk
-     * @param pDisk
-     */
     void setDisk(std::string pDisk){
         _diskID = pDisk;
     }
 
-    /**
-     * @brief getPointer
-     * @return
-     */
     int getStartBlock() const{
         return _startBlock;
     }
 
-    /**
-     * @brief setPointer
-     * @param pPointer
-     */
     void setStartBlock(int pBlock){
         _startBlock = pBlock;
     }
+
 };
 
 #endif // IFILE_H

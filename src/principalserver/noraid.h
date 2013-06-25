@@ -3,39 +3,42 @@
 
 #include "diskgroup.h"
 
-class NoRaid : public DiskGroup{
+class NoRaid : public DiskGroup
+{
+
+private:
+
+	void eraseFile(iFile* pFile);
+
 public:
 
 	NoRaid(std::string pID, int pBlockSize);
 	NoRaid(std::string pID, int pBlockSize, int pMaxSize, bool pFunctional, bool pWorking);
 
+
+	/* operaciones sobre el arbol n-ario */
+
+	DataNode * getFile(iFile* pFile);
 	void startDiskGroup();
-	
 	void stopDiskGroup();
-	
-	DataNode* getFile(iFile* pFile);
-
 	void deleteFile(nTreeNode* pNode);
+	nTreeNode * createFile(nTreeNode* pNode,  std::string pName, RegisterBuffer* pRegister, std::string pUser);
 
-	nTreeNode* createFile(nTreeNode* pActual, std::string pName, RegisterSpace* pRegister, std::string pUser);	
+	/* operaciones sobre el registros */
 
 	short apendReg(DataNode* pData, iFile* pFile);
-
 	short writeReg(int pRegisterNumber, DataNode* pData, iFile* pFile);
-
 	DataNode* readReg(int pRegisterNumber, iFile* pFile);
-
 	void eraseReg(int pRegisterNumber, iFile* pFile);
-
 	RegisterSpace* getRegFormat(iFile* pFile);
+
+	/* operaciones administrativas */
 
 	void format();
 
+	/* operaciones sobre discos */
+
 	std::string toBinario(DataNode* pData);
-
-private:
-	void eraseFile(iFile* pFile);
-
 
 };
 
