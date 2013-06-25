@@ -54,7 +54,7 @@ std::string LssOperations::writeBlock(short pID, std::string pData, int pSession
 	if (lss == 0){
 		return "?Error. El disco no ha sido encontrado\n";
 	}
-	return lss->writeA(pData);
+	return std::to_string(lss->writeA(pData));
 }
 
 std::string LssOperations::writeBytes(short pID, int pBlock, int pOffset, int pSize, std::string pData, int pSessionID){
