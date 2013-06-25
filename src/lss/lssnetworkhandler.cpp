@@ -72,7 +72,7 @@ void LSSNetworkHandler::readBlock(int pSocket, std::string pParam){
 void LSSNetworkHandler::writeBlock(int pSocket, std::string pParam){
 	try {
 		int sessionID = stoi(Tokenizer::getCommandSpace(pParam, 1));
-		short diskID = stoi(Tokenizer::getCommandSpace(pParam, 2);
+		short diskID = stoi(Tokenizer::getCommandSpace(pParam, 2));
 		std::string data = pParam.substr(pParam.find(' ')+1, pParam.length() - pParam.find(' '));
 		if (data == ""){
 			outMessage("?Error: El comando 'writeBlock' espera dos atributos\n", pSocket);
