@@ -9,12 +9,12 @@ class NoRaid : public DiskGroup
 private:
 
 	void eraseFile(iFile* pFile);
+	SimpleList* Register2binary (RegisterSpace* pRegister, short pMetadataNumber, SimpleList* pBloques);
 
 public:
 
 	NoRaid(std::string pID, int pBlockSize);
 	NoRaid(std::string pID, int pBlockSize, int pMaxSize, bool pFunctional, bool pWorking);
-
 
 	/* operaciones sobre el arbol n-ario */
 
@@ -22,7 +22,7 @@ public:
 	void startDiskGroup();
 	void stopDiskGroup();
 	void deleteFile(nTreeNode* pNode);
-	nTreeNode * createFile(nTreeNode* pNode,  std::string pName, RegisterBuffer* pRegister, std::string pUser);
+	nTreeNode * createFile(nTreeNode* pNode,  std::string pName, RegisterSpace* pRegister, std::string pUser);
 
 	/* operaciones sobre el registros */
 

@@ -81,7 +81,7 @@ Lss::Lss(std::string pDisk, short pID, int pSize, std::string pSecKey)
 	header();
 }
 
-short Lss::writeA (std::string pData, short pBlockPadre)
+short Lss::writeA (std::string pData)
 {
 	short freeblock = getFreeBlock(); 	/* pide un bloque borrado (en caso de que existan) */	
 	if ( freeblock == 0)	/* no hay bloques borrados */
@@ -115,13 +115,6 @@ short Lss::writeA (std::string pData, short pBlockPadre)
 		writeB (pData, 12+(freeblock*_blockSize), _blockSize );		/* escribe los datos en el bloque borrado */
 	}
 	
-	if (pBlockPadre == 0) 	/* no tiene bloque predecesor */
-	{	}
-	else 	/* tiene un bloque predecesor */
-	{
-		//std::string direction = DIRECTION + _disk + TWOPOINTS + std::to_string(freeblock);
-		//write(direction, 12+_blockSize*pBlockPadre, 14);
-	}
 	return freeblock;		/* numero de bloque donde escribio los datos*/
 }
 
