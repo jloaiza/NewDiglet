@@ -31,6 +31,11 @@ std::string LssOperations::format(short pID, int pSessionID, int pBlockSize){
 	}
 }
 
+std::string LssOperations::isAlive(short pID){
+	LssManager* manager = LssManager::getInstance();
+	return (manager->getLss(pID)) != 0?"true":"false";
+}
+
 std::string LssOperations::connect(short pID, std::string pKey, int pSessionID){
 	LssManager* manager = LssManager::getInstance();
 	Lss* toAdd = manager->getLss(pID);

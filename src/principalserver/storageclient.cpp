@@ -33,7 +33,6 @@ std::string StorageClient::format(int pDiskID, int pBlockSize)
 
     client->sendMessage(message);
     std::string messagea = client->readMessage();
-    _sessionID = std::stoi(messagea);
     delete client;
     return messagea;
 }
@@ -118,12 +117,13 @@ std::string StorageClient::readBytes(int pDiskID, int pBlock, int pOffSet, int p
 
 bool StorageClient::isAlive(int pDiskID)
 {
-    return getDiskSize(pDiskID)[0] != '?';
-}
-
-void StorageClient::addDisk(Disk* pDisk)
-{
-    _diskList->insertEnd(pDisk);
+    Client* client = new Client(_ip,_port);
+    client->Connect();
+    std::string message = std::string("isAlive ") + std::to_string(pDiskID);
+    client->sendMessage(message);
+    std::string messagea = client->readMessage();
+    delete client;
+    return messagea == "true";
 }
 
 

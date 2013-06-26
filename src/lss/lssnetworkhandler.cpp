@@ -22,6 +22,9 @@ void LSSNetworkHandler::inMessage(std::string pMessage, int pSocket){
 	} else if (command == "format"){
 		format(pSocket, param);
 
+	} else if (command == "isAlive"){
+		isAlive(pSocket, param);
+
 	}else if (command == "readBlock"){
 		readBlock(pSocket, param);
 
@@ -69,6 +72,20 @@ void LSSNetworkHandler::format(int pSocket, std::string pParam){
 			outMessage("?Error: El comando 'format' espera tres atributos\n", pSocket);
 		} else {
 			outMessage(LssOperations::format(diskID, sessionID, blockSize), pSocket);
+		}
+	} catch (std::exception e){
+		outMessage("?Error: El primer y segundo paremetro debe ser un número\n", pSocket);
+	}
+}
+
+void LSSNetworkHandler::isAlive(int pSocket, std::string pParam){
+	try {
+
+		int diskID = stoi(Tokenizer::getCommandSpace(pParam, 1));
+		if (pParam == ""){
+			outMessage("?Error: El comando 'isAlive' espera un atributo\n", pSocket);
+		} else {
+			outMessage(LssOperations::isAlive(diskID), pSocket);
 		}
 	} catch (std::exception e){
 		outMessage("?Error: El primer y segundo paremetro debe ser un número\n", pSocket);

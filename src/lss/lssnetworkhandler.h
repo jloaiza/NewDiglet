@@ -21,6 +21,7 @@ private:
 	
 	void connect(int pSocket, std::string pParam);
 	void format(int pSocket, std::string pParam);
+	void isAlive(int pSocket, std::string pParam);
 	void readBlock(int pSocket, std::string pParam);
 	void writeBlock(int pSocket, std::string pParam);
 	void getSize(int pSocket, std::string pParam);
