@@ -127,7 +127,7 @@ void GeneralManager::addLSS(std::string pDiskGroupID, std::string pIPToConnect, 
 		std::cout<<"Error. El disco ya existe."<<std::endl;
 		return;
 	}
-
+	
 	//Busca el DiskGroup para agregar el disco
 	DiskGroup* diskGroup = _diskGroups->search(&pDiskGroupID);
 	if (diskGroup == 0){
@@ -144,12 +144,14 @@ void GeneralManager::addLSS(std::string pDiskGroupID, std::string pIPToConnect, 
 		}
 		_clientsTree->insert(client);
 	}
-
+	
 	//Crea el disco y lo inserta
 	Disk* disk = new Disk(client, pDiskID, pSecurityKey); // Al crear el disco el se conecta automaticamente
+
 	if (!disk->isAlive()){
 		std::cout<<"Error. El disco no está disponible. Este será insertado pero no podrá ser utilizado hasta que se encuentre online."<<std::endl;
 	}
+	
 	_diskTree->insert(disk);
 	diskGroup->addDisk(disk);
 }
@@ -250,7 +252,7 @@ void GeneralManager::loadClients(){
 
 void GeneralManager::loadDisks(){
 	if (!parserxml::thereFile("raidb/disks.xml")){
-		diskgroupsxml::createXMLFile("raidb/disks.xml");
+		DiskXML::createXMLFile("raidb/disks.xml");
 	}
 	std::string id = DiskXML::getIdDisk("raidb/disks.xml", 1);
 	for (int i = 1; id != ""; i++){
@@ -269,7 +271,7 @@ void GeneralManager::loadDisks(){
 
 void GeneralManager::loadUsers(){
 	if (!parserxml::thereFile("raidb/users.xml")){
-		diskgroupsxml::createXMLFile("raidb/users.xml");
+		usersxml::createXMLFile("raidb/users.xml");
 	}
 	std::string id = usersxml::getIdUser("raidb/users.xml", 1);
 	for (int i = 1; id != ""; i++){

@@ -19,7 +19,10 @@ void LSSNetworkHandler::inMessage(std::string pMessage, int pSocket){
 	} else if (command == "startClient"){
 		outMessage( std::to_string(LssOperations::newSession()) , pSocket);
 
-	} else if (command == "readBlock"){
+	} else if (command == "format"){
+		format(pSocket, param);
+
+	}else if (command == "readBlock"){
 		readBlock(pSocket, param);
 
 	} else if (command == "writeBlock"){
@@ -50,6 +53,22 @@ void LSSNetworkHandler::connect(int pSocket, std::string pParam){
 			outMessage("?Error: El comando 'connect' espera dos atributos\n", pSocket);
 		} else {
 			outMessage(LssOperations::connect(diskID, secKey, sessionID), pSocket);
+		}
+	} catch (std::exception e){
+		outMessage("?Error: El primer y segundo paremetro debe ser un número\n", pSocket);
+	}
+}
+
+void LSSNetworkHandler::format(int pSocket, std::string pParam){
+	try {
+
+		int sessionID = stoi(Tokenizer::getCommandSpace(pParam, 1));
+		short diskID = stoi(Tokenizer::getCommandSpace(pParam, 2));
+		short blockSize = stoi(Tokenizer::getCommandSpace(pParam, 3));
+		if (pParam == ""){
+			outMessage("?Error: El comando 'format' espera tres atributos\n", pSocket);
+		} else {
+			outMessage(LssOperations::format(diskID, sessionID, blockSize), pSocket);
 		}
 	} catch (std::exception e){
 		outMessage("?Error: El primer y segundo paremetro debe ser un número\n", pSocket);

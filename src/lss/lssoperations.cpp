@@ -19,6 +19,18 @@ std::string LssOperations::getSize(short pID, int pSessionID){
 	}
 }
 
+std::string LssOperations::format(short pID, int pSessionID, int pBlockSize){
+	LssManager* manager = LssManager::getInstance();
+	Session* session = manager->getSession(pSessionID);
+	Lss* lss = session->getLss(pID);
+	if (lss == 0){
+		return "?Error. El disco no ha sido encontrado\n";
+	} else {
+		lss->format(pBlockSize);
+		return "formated.";
+	}
+}
+
 std::string LssOperations::connect(short pID, std::string pKey, int pSessionID){
 	LssManager* manager = LssManager::getInstance();
 	Lss* toAdd = manager->getLss(pID);

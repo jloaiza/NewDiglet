@@ -229,6 +229,7 @@ int ServerOperations::connect(std::string pUser, std::string pSecKey, std::strin
 int ServerOperations::adduser(std::string pUser, std::string pSecKey, std::string pDisk){
 	GeneralManager* manager = GeneralManager::getInstance();
 	if (manager->getUser(pUser) != 0){
+		std::cout<<"bad user"<<std::endl;
 		return PS::NO_SESSION;
 	}
 	manager->addUser(pUser, pSecKey);

@@ -55,6 +55,7 @@ public:
     std::string readBlock(int pDiskID, int pBlock);
     int writeBlock(int pDiskID, std::string pData);
     std::string getDiskSize(int pDiskID);
+    std::string format(int pDiskID, int pBlockSize);
     std::string writeBytes(int pDiskID, int pBlock, int pOffSet, int pSize, std::string pData);
     std::string readBytes(int pDiskID, int pBlock, int pOffSet, int pSize);
     bool isAlive(int pDiskID);

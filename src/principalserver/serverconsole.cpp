@@ -6,6 +6,7 @@
 #include "generalmanager.h"
 #include "../include/constants.h"
 #include <termios.h>
+#include "../tokenizer/tokenizer.h"
 
 void echo(bool pON);
 void echo(bool pON){
@@ -40,30 +41,46 @@ void ServerConsole::title(){
 }
 
 void ServerConsole::addDisk(){
+	//----------------------------------------------------------------
 	std::cout<<"ID del DiskGroup al que desea agregar el disco: ";
 	std::string idDiskGroup;
+
 	std::cin>>idDiskGroup;
+	idDiskGroup = Tokenizer::cleanEntry(idDiskGroup);
+
 	std::cout<<std::endl;
+
+	//----------------------------------------------------------------
 
 	std::cout<<"Dirección IP del LSS: ";
 	std::string ip;
+
 	std::cin>>ip;
+	ip = Tokenizer::cleanEntry(ip);
+
 	std::cout<<std::endl;
+
+	//----------------------------------------------------------------
 
 	std::cout<<"Puerto del LSS: ";
 	int port;
 	std::cin>>port;
 	std::cout<<std::endl;
 
+	//----------------------------------------------------------------
 	std::cout<<"ID del LSS: ";
 	int id;
 	std::cin>>id;
 	std::cout<<std::endl;
 
+	//----------------------------------------------------------------
 	std::cout<<"SecurityKey del LSS: ";
 	echo(false);
 	std::string secKey;
+
 	std::cin>>secKey;
+	secKey = Tokenizer::cleanEntry(secKey);
+
 	secKey = md5(secKey);
 	echo(true);
 	std::cout<<std::endl;

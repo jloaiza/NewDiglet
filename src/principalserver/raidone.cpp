@@ -26,13 +26,13 @@ RaidOne::RaidOne(std::string pID, int pBlockSize, int pMaxSize, bool pFunctional
 }
 
 void RaidOne::startDiskGroup(){
-	if (_working){
-		_functional = true;
+	if (_functional){
+		_working = true;
 	}
 }
 	
 void RaidOne::stopDiskGroup(){
-	_functional = false;
+	_working = false;
 }
 
 DataNode* RaidOne::getFile(iFile* pFile){
@@ -152,7 +152,11 @@ RegisterSpace* RaidOne::getRegFormat(iFile* pFile){
 }
 
 void RaidOne::format(){
-
+	_functional = true;
+	ListNode<Disk>* iNode = _diskList->getHead();
+	while(iNode != 0){
+		iNode->getData()->format(_blockSize);
+	}
 }
 
 void RaidOne::eraseFile(iFile* pFile){

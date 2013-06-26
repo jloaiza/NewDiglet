@@ -9,6 +9,7 @@ class LssOperations {
 public:
 	static int newSession();
 	static std::string getSize(short pID, int pSessionID);
+	static std::string format(short pID, int pSessionID, int pBlockSize);
 	static std::string connect(short pID, std::string pKey, int pSessionID);
 	static std::string readBlock(short pID, int pBlock, int pSessionID);
 	static std::string writeBlock(short pID, std::string pData, int pSessionID);

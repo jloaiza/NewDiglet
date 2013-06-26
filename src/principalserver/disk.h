@@ -42,6 +42,7 @@ public:
 	std::string getDiskDirection();
 
 	bool isAlive();
+	void format(int pBlockSize);
 	std::string readBlock(int pBlock);
 	int writeBlock(std::string pData);
 	void writeBytes(int pBlock, int pOffset, int pSize, std::string pData);

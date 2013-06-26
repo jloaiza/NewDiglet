@@ -78,7 +78,9 @@ Disk::Disk(StorageClient* pClient, int pID, std::string pSecKey){
 	_id = pID;
 	_secKey = pSecKey;
 	_storageClient->connect(pID, pSecKey);
+	std::cout<<"disk reach"<<std::endl;
 	_storageClient->addDisk(this);
+	std::cout<<"disk reach2"<<std::endl;
 }
 
 std::string Disk::getDiskDirection() {
@@ -87,6 +89,10 @@ std::string Disk::getDiskDirection() {
 
 std::string Disk::readBlock(int pBlock){
 	return _storageClient->readBlock(_id, pBlock);
+}
+
+void Disk::format(int pBlockSize){
+	_storageClient->format(pBlockSize, _id);
 }
 
 int Disk::writeBlock(std::string pData){

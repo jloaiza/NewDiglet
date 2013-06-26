@@ -5,6 +5,7 @@ StorageClient::StorageClient(std::string pIp, int pPort)
 {
     _ip = pIp;
     _port = pPort;
+    _diskList = new DoubleLinkedList<Disk, short>();
     startClient();
 }
 
@@ -15,6 +16,20 @@ std::string StorageClient::startClient()
     client->Connect();
 
     std::string message = std::string("startClient");
+
+    client->sendMessage(message);
+    std::string messagea = client->readMessage();
+    _sessionID = std::stoi(messagea);
+    delete client;
+    return messagea;
+}
+
+std::string StorageClient::format(int pDiskID, int pBlockSize)
+{
+    Client* client = new Client(_ip, _port);
+    client->Connect();
+
+    std::string message = std::string("format ") + std::to_string(pDiskID) + std::string(" ") + std::to_string(_sessionID) + std::string(" ") + std::to_string(pBlockSize);
 
     client->sendMessage(message);
     std::string messagea = client->readMessage();
