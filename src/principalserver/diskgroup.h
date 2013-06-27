@@ -118,7 +118,8 @@ public:
 	 * @param pRelativePath direccion relativa del nodo que buscamos
 	 */
 	nTreeNode* getNode(std::string pRelativePath, nTreeNode* pNode);
-	
+	nTreeNode* getRoot();
+
 	int getBlockSize() const {
 		return _blockSize;
 	}

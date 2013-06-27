@@ -158,6 +158,7 @@ void NetworkHandler::closeServer()
 {
     _runClient = 1;
     _exitCode = 99;
+    _run = false;
 }
 
 void NetworkHandler::Run()

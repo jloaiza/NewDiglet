@@ -134,9 +134,16 @@ std::string ServerOperations::cd(int pSessionID, std::string pPath){
 	if (session == 0){
 		return "*Error. Sesión no encontrada\n";
 	}
+
 	DiskGroup* diskgroup = session->getDiskGroup();
 	nTreeNode* currentNode = session->getCurrentNode();
+
+	std::cout<<"cd path: "<<pPath<<std::endl;
+
 	nTreeNode* cdNode = diskgroup->getNode(pPath, currentNode);
+
+	std::cout<<"cd node: "<<cdNode<<std::endl;
+
 	if (cdNode == 0 || cdNode->getFile() != 0){
 		return "?Error. Directorio invalido\n";
 	}
@@ -183,21 +190,28 @@ std::string ServerOperations::moveSeek(int pSessionID, int pSeekPos){
 }
 
 std::string ServerOperations::touch(int pSessionID, std::string pPath, std::string pFormat){
+	std::cout<<"Touch h"<<std::endl;
 	GeneralManager* manager = GeneralManager::getInstance();
 	Session* session = manager->getSession(pSessionID);
 	if (session == 0){
 		return "*Error. Sesión no encontrada\n";
 	}
+	std::cout<<"Touch h2"<<std::endl;
 	DiskGroup* diskgroup = session->getDiskGroup();
 	nTreeNode* currentNode = session->getCurrentNode();
-
+	std::cout<<"Touch h2.1"<<std::endl;
 	std::string fileName = Tokenizer::dividePathAndName(pPath, &pPath);
-
+	std::cout<<"Touch h2.2"<<std::endl;
+	if (haveRestringedChar(fileName)){
+		return "?Error. El nombre contiene caracteres no permitidos\n";
+	}
+	std::cout<<"Touch h3"<<std::endl;
 	nTreeNode* cdNode = diskgroup->getNode(pPath, currentNode);
+	std::cout<<"Touch h3.1"<<std::endl;
 	if (cdNode == 0 || cdNode->getFile() != 0){
 		return "?Error. Ruta inválida\n";
 	}
-	
+	std::cout<<"Touch h4"<<std::endl;
 	RegisterSpace* format = getFormat(pFormat);
 	session->setCurrentNode(diskgroup->createFile(cdNode, fileName, format, session->getUser()));
 	session->setCurrentFormat(format);
@@ -205,7 +219,31 @@ std::string ServerOperations::touch(int pSessionID, std::string pPath, std::stri
 	return "";
 }
 
+bool ServerOperations::isRestringedChar(char pChar){
+	char restringedChars[] = {'/', '\\', '"'};
+	int length = (sizeof restringedChars)/sizeof(char);
+	for (int i = 0; i < length; i++){
+		if (pChar == restringedChars[i]){
+			return true;
+		}
+	}
+	return false;
+}
+
+bool ServerOperations::haveRestringedChar(std::string pEntry){
+	for (int i = 0; i < pEntry.length(); i++){
+		if ( isRestringedChar(pEntry[i]) ){
+			return true;
+		}
+	}
+	return false;;
+}
+
 std::string ServerOperations::mkdir(int pSessionID, std::string pName){
+	if (haveRestringedChar(pName)){
+		return "?Error. El nombre contiene caracteres no permitidos\n";
+	}
+
 	GeneralManager* manager = GeneralManager::getInstance();
 	Session* session = manager->getSession(pSessionID);
 	if (session == 0){
@@ -214,8 +252,23 @@ std::string ServerOperations::mkdir(int pSessionID, std::string pName){
 	DiskGroup* diskgroup = session->getDiskGroup();
 	nTreeNode* currentNode = session->getCurrentNode();
 
+	if (diskgroup->getNode(pName, currentNode) != 0){
+		return "?Error. Ya existe un archivo o carpeta con el mismo nombre.";
+	}
+
 	diskgroup->createDir(currentNode, pName, session->getUser());
 	return "";
+}
+
+
+std::string ServerOperations::ls(int pSessionID){
+	GeneralManager* manager = GeneralManager::getInstance();
+	Session* session = manager->getSession(pSessionID);
+	if (session == 0){
+		return "*Error. Sesión no encontrada\n";
+	}
+	nTreeNode* currentNode = session->getCurrentNode();
+	return currentNode->getFilesRep() + std::string("\n");
 }
 
 int ServerOperations::connect(std::string pUser, std::string pSecKey, std::string pDisk){
@@ -379,5 +432,5 @@ std::string ServerOperations::getInfo(int pSessionID){
 	if (session == 0){
 		return "*Error. Sesión no encontrada\n";
 	}
-	return session->getCurrentNode()->getPath() + " " + session->getUser();
+	return session->getCurrentNode()->getTotalPath() + " " + session->getUser();
 }

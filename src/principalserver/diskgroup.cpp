@@ -63,7 +63,11 @@ std::string DiskGroup::getDiskList(){
 }
 
 nTreeNode* DiskGroup::getNode(std::string pRelativePath, nTreeNode* pCurrentNode){
-	_files->getNode(pCurrentNode, pRelativePath);
+	return _files->getNode(pCurrentNode, pRelativePath);
+}
+
+nTreeNode* DiskGroup::getRoot(){
+	return _files->getRoot();
 }
 
 void DiskGroup::createDir(nTreeNode* pFolderNode, std::string pName, std::string pUser){

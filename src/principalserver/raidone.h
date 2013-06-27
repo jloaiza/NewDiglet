@@ -16,6 +16,8 @@ public:
 	
 	DataNode* getFile(iFile* pFile);
 
+	ListNode<Disk>* getNextDisk(ListNode<Disk>* pActual);
+
 	void deleteFile(nTreeNode* pNode);
 
 	nTreeNode* createFile(nTreeNode* pActual, std::string pName, RegisterSpace* pRegister, std::string pUser);	

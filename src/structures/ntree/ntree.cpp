@@ -4,7 +4,7 @@
 
 nTree::nTree()
 {
-    _root = new nTreeNode(NULL, "/", "");
+    _root = new nTreeNode(NULL, "", "");
 }
 
 void nTree::insert(iFile* pFile, nTreeNode* pActual, std::string pName, std::string pUser, std::string pPath){
@@ -13,7 +13,7 @@ void nTree::insert(iFile* pFile, nTreeNode* pActual, std::string pName, std::str
         return;
     }
     nTreeNode* newNode = new nTreeNode(pFile, pName, pUser);
-    newNode->setPath( pActual->getPath() + std::string("/") + pActual->getName() );
+    newNode->setPath( toInsert->getTotalPath() + "/" );
     toInsert->addChild(newNode);
 }
 
@@ -27,6 +27,7 @@ nTreeNode* nTree::getNode(nTreeNode* pActual, std::string pPath){
 
     std::string toMove = Tokenizer::getCommandSpace(pPath, 1, '/');
     for (int i = 1; iNode != 0 && toMove != ""; i++){
+        std::cout<<"to move: "<<toMove<<std::endl;
         if (toMove == ".."){
             iNode = iNode->getParent();
         } else {
@@ -34,7 +35,7 @@ nTreeNode* nTree::getNode(nTreeNode* pActual, std::string pPath){
         }
         toMove = Tokenizer::getCommandSpace(pPath, i+1, '/');
     }
-
+    
     return iNode;
 }
 

@@ -41,6 +41,7 @@ public:
 
 	std::string getDiskDirection();
 
+	std::string getIp();
 	bool isAlive();
 	void format(int pBlockSize);
 	std::string readBlock(int pBlock);

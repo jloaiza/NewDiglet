@@ -18,6 +18,7 @@ int Tokenizer::charIndex(std::string pString, char pChar, int pNumber){
 }
 
 std::string Tokenizer::dividePathAndName(const std::string pTotalPath, std::string* pFolderPath){
+	std::cout<<"token: "<<pFolderPath<<std::endl;
 	int index = -1;
 	bool quotes = false;
 	bool searching = true;
@@ -30,7 +31,8 @@ std::string Tokenizer::dividePathAndName(const std::string pTotalPath, std::stri
 		}
 	}
 	if (index == -1){
-		return 0;
+		*pFolderPath = "";
+		return pTotalPath;
 	}
 	std::string fileName = pTotalPath.substr(index+1, pTotalPath.length()-1);
 	*pFolderPath = pTotalPath.substr(0, index);

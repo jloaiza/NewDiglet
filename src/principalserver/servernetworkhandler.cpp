@@ -21,6 +21,9 @@ void ServerNetworkHandler::inMessage(std::string pMessage, int pSocket){
 		} else if (command == "cd"){
 			cd(param, pSocket);
 		
+		} else if (command == "ls"){
+			ls(pSocket);
+		
 		} else if (command == "rm"){
 			rm(param, pSocket);
 
@@ -94,9 +97,13 @@ void ServerNetworkHandler::consoleUI(int pSocket){
 		std::string userInfo = ServerOperations::getInfo(_sessionID); //OBTENER PATH
 		std::string currentPath = Tokenizer::getCommandSpace(userInfo, 1);
 		std::string user = Tokenizer::getCommandSpace(userInfo, 2);
-		std::string message = getClientIP() + std::string("@") + user + std::string(":~") + currentPath + std::string(">> ");
+		std::string message = getClientIP() + std::string("@") + user + std::string(":") + currentPath + std::string(">> ");
 		outMessage(message, pSocket);
 	}
+}
+
+void ServerNetworkHandler::ls(int pSocket){
+	outMessage(ServerOperations::ls(_sessionID), pSocket);
 }
 
 void ServerNetworkHandler::outMessageValidate(std::string pMessage, int pSocket){
@@ -179,7 +186,7 @@ void ServerNetworkHandler::adduser(std::string pParameters, int pSocket){
 	} else {
 		_sessionID = ServerOperations::adduser(user, secKey, disk);
 		if (_sessionID == -1){
-			outMessage("Error de registro, el nombre de usuario ya existe o disco incorrecto\n", pSocket);
+			outMessage("Error de registro, el nombre de usuario ya existe o disco incorrecto o en mantenimiento\n", pSocket);
 		}
 	}
 }

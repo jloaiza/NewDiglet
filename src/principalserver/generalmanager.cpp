@@ -64,8 +64,10 @@ Session* GeneralManager::getSession(int pSessionID){
 }
 
 int GeneralManager::newSession(std::string pUser, std::string pDiskGroupID){
+	std::cout<<"New session disk id: "<<pDiskGroupID<<std::endl;
 	DiskGroup* disk = _diskGroups->search( &pDiskGroupID );
 	if (disk == 0){
+		std::cout<<"bad disk"<<std::endl;
 		return PS::NO_SESSION;
 	} else {
 		if (disk->isWorking()){

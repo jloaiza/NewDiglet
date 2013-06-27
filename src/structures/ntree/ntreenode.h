@@ -9,6 +9,8 @@
 class nTreeNode 
 {	
 private:
+	std::string getFilesRepAux(TreeNode<nTreeNode>* pNode);
+
     iFile* _file;
     AVLTree<nTreeNode, std::string>* _children;
     nTreeNode* _parent;
@@ -19,6 +21,7 @@ private:
 
 public:
 	nTreeNode(iFile* pFile, std::string pName, std::string pUser);
+	std::string getFilesRep();
 
 	bool operator==(std::string& pNode){
 		return _name == pNode;
@@ -84,7 +87,7 @@ public:
 	}
 
 	std::string getTotalPath() const {
-		return _path + '/' + _name;
+		return _path + _name;
 	}
 
 	nTreeNode* getParent() const {
@@ -105,6 +108,7 @@ public:
 
 	void addChild(nTreeNode* pChild){
 		_children->insert(pChild);
+		pChild->setParent(this);
 	}
 
 	AVLTree<nTreeNode, std::string>* getChildren() const {

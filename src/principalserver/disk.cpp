@@ -83,6 +83,10 @@ Disk::Disk(StorageClient* pClient, int pID, std::string pSecKey){
 	std::cout<<"disk reach2"<<std::endl;
 }
 
+std::string Disk::getIp(){
+	return _storageClient->getIP();
+}
+
 std::string Disk::getDiskDirection() {
 		return _storageClient->getIP() + std::string(":") + std::to_string(_id);
 	}

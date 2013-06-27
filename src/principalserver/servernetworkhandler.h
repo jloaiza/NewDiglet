@@ -23,6 +23,7 @@ private:
 
 	void outMessageValidate(std::string pMessage, int pSocket);
 	void get(std::string pParameters, int pSocket);
+	void ls(int pSocket);
 	void cd(std::string pParameters, int pSocket);
 	void rm(std::string pParameters, int pSocket);
 	void touch(std::string pParameters, int pSocket);

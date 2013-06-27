@@ -3,6 +3,7 @@
 #include "../include/constants.h"
 #include "../binaryoperations/byteshandler.h"
 #include "../tokenizer/tokenizer.h"
+#include <iostream>
 
 RaidOne::RaidOne(std::string pID, int pBlockSize){
 	_id = pID;
@@ -44,6 +45,7 @@ void RaidOne::deleteFile(nTreeNode* pNode){
 }
 
 nTreeNode* RaidOne::createFile(nTreeNode* pActual, std::string pName, RegisterSpace* pRegister, std::string pUser){
+	std::cout<<"createFile"<<std::endl;
 	DataBuffer header = DataBuffer(); //Almacenará la información del header
 
 	//Tomar la información
@@ -97,20 +99,13 @@ nTreeNode* RaidOne::createFile(nTreeNode* pActual, std::string pName, RegisterSp
 	while (iBlock->getNext() != 0){
 		int ip1, ip2, ip3, ip4;
 		short disk;
-		if (tempStart->getNext() == 0){
-			ip1 = std::stoi(Tokenizer::getCommandSpace(_diskList->getHead()->getData()->getDiskDirection(), 1, ':'));
-			ip2 = std::stoi(Tokenizer::getCommandSpace(_diskList->getHead()->getData()->getDiskDirection(), 2, ':'));
-			ip3 = std::stoi(Tokenizer::getCommandSpace(_diskList->getHead()->getData()->getDiskDirection(), 3, ':'));
-			ip4 = std::stoi(Tokenizer::getCommandSpace(_diskList->getHead()->getData()->getDiskDirection(), 4, ':'));
-			disk = _diskList->getHead()->getData()->getDiskID();
 
-		} else {
-			ip1 = std::stoi(Tokenizer::getCommandSpace(tempStart->getNext()->getData()->getDiskDirection(), 1, ':'));
-			ip2 = std::stoi(Tokenizer::getCommandSpace(tempStart->getNext()->getData()->getDiskDirection(), 2, ':'));
-			ip3 = std::stoi(Tokenizer::getCommandSpace(tempStart->getNext()->getData()->getDiskDirection(), 3, ':'));
-			ip4 = std::stoi(Tokenizer::getCommandSpace(tempStart->getNext()->getData()->getDiskDirection(), 4, ':'));
-			disk = tempStart->getNext()->getData()->getDiskID();
-		}
+		ip1 = std::stoi(Tokenizer::getCommandSpace(getNextDisk(tempStart)->getData()->getIp(), 1, '.'));
+		ip2 = std::stoi(Tokenizer::getCommandSpace(getNextDisk(tempStart)->getData()->getIp(), 2, '.'));
+		ip3 = std::stoi(Tokenizer::getCommandSpace(getNextDisk(tempStart)->getData()->getIp(), 3, '.'));
+		ip4 = std::stoi(Tokenizer::getCommandSpace(getNextDisk(tempStart)->getData()->getIp(), 4, '.'));
+		disk = tempStart->getNext()->getData()->getDiskID();
+		
 
 		int nextBlock = *iBlock->getNext()->getData();
 
@@ -129,6 +124,14 @@ nTreeNode* RaidOne::createFile(nTreeNode* pActual, std::string pName, RegisterSp
 	//Se incerta el ifile en el árbol y se devuelve el nodo correspondiente
 	_files->insert(file, pActual, pName, pUser, "");
 	return _files->getNode(pActual, pName);
+}
+
+ListNode<Disk>* RaidOne::getNextDisk(ListNode<Disk>* pActual){
+	if (pActual->getNext() == 0){
+		return _diskList->getHead();
+	} else {
+		return pActual->getNext();
+	}
 }
 
 short RaidOne::apendReg(DataNode* pData, iFile* pFile){	
@@ -156,6 +159,7 @@ void RaidOne::format(){
 	ListNode<Disk>* iNode = _diskList->getHead();
 	while(iNode != 0){
 		iNode->getData()->format(_blockSize);
+		iNode = iNode->getNext();
 	}
 }
 

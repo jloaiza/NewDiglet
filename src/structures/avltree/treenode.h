@@ -63,8 +63,6 @@ public:
 	bool haveRightChild() const;
 };
 
-#endif /*TREE_NODE*/
-
 //-------------------------Declaración de los métodos------------------------------------
 
 template <class t>
@@ -106,3 +104,5 @@ template <class t>
 bool TreeNode<t>::haveLeftChild() const{
 	return _leftChild != 0;
 }
+
+#endif /*TREE_NODE*/

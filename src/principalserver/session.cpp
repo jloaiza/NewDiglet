@@ -56,6 +56,6 @@ Session::Session(std::string pUser, DiskGroup* pDisk){
 	_disk = pDisk;
 	_sessionID = _sessionCounter++;
 	_seek = -1;
-	_currentNode = pDisk->getNode("", 0);
+	_currentNode = pDisk->getRoot();
 	_register = 0;
 }
