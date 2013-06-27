@@ -2,6 +2,7 @@
 #include "lssmanager.h"
 #include "session.h"
 #include "lss.h"
+#include <iostream>
 
 int LssOperations::newSession(){
 	LssManager* manager = LssManager::getInstance();
@@ -33,6 +34,7 @@ std::string LssOperations::format(short pID, int pSessionID, int pBlockSize){
 
 std::string LssOperations::isAlive(short pID){
 	LssManager* manager = LssManager::getInstance();
+	std::cout<<"isAlive request. Disk: '"<<pID<<"' alive: "<<(manager->getLss(pID) != 0?"true":"false")<<std::endl;
 	return (manager->getLss(pID)) != 0?"true":"false";
 }
 
@@ -65,6 +67,7 @@ std::string LssOperations::readBlock(short pID, int pBlock, int pSessionID){
 }
 
 std::string LssOperations::writeBlock(short pID, std::string pData, int pSessionID){
+	std::cout<<"to write: "<< pData<<std::endl;
 	LssManager* manager = LssManager::getInstance();
 	Session* session = manager->getSession(pSessionID);
 	Lss* lss = session->getLss(pID);
@@ -75,6 +78,7 @@ std::string LssOperations::writeBlock(short pID, std::string pData, int pSession
 }
 
 std::string LssOperations::writeBytes(short pID, int pBlock, int pOffset, int pSize, std::string pData, int pSessionID){
+	std::cout<<"to write: "<< pData<<std::endl;
 	LssManager* manager = LssManager::getInstance();
 	Session* session = manager->getSession(pSessionID);
 	Lss* lss = session->getLss(pID);

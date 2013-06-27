@@ -23,6 +23,7 @@ int RegisterSpace::totalLength(){
 	RegisterSpace* iSpace = this;
 	while(iSpace != 0){
 		length++;
+		iSpace = iSpace->getNext();
 	}
 	return length;
 }

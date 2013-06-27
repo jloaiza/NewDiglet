@@ -78,9 +78,7 @@ Disk::Disk(StorageClient* pClient, int pID, std::string pSecKey){
 	_id = pID;
 	_secKey = pSecKey;
 	_storageClient->connect(pID, pSecKey);
-	std::cout<<"disk reach"<<std::endl;
 	_storageClient->addDisk(this);
-	std::cout<<"disk reach2"<<std::endl;
 }
 
 std::string Disk::getIp(){
@@ -112,5 +110,7 @@ std::string Disk::readBytes(int pBlock, int pOffset, int pSize){
 }
 
 bool Disk::isAlive(){
-	return _storageClient->isConnected() && _storageClient->isAlive(_id);
+	//bool connected = _storageClient->isConnected();
+	bool alive = _storageClient->isAlive(_id);
+	return  /*connected &&*/ alive;
 }

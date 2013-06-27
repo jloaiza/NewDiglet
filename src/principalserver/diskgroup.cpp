@@ -53,9 +53,9 @@ bool DiskGroup::operator!=(DiskGroup& pDiskGroup){
 std::string DiskGroup::getDiskList(){
 	ListNode<Disk>* aux = _diskList->getHead();
 	std::string message;
-	message += std::string("List of diskroup ") + _id + std::string(" order of list:\nDISK NAME    &    CONECTION STATUS");
+	message += std::string("List of diskroup ") + _id + std::string(" order of list:\nDISK NAME  & CONECTION STATUS") + "\n";
 	while (aux != 0){
-		message += aux->getData()->getDiskID();
+		message += aux->getData()->getDiskDirection() + "  ";
 		message += (aux->getData()->isAlive()?"online":"offline") + '\n';
 		aux = aux->getNext();
 	}

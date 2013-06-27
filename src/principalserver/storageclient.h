@@ -68,6 +68,7 @@ private:
     int _port;
     int _sessionID;
     DoubleLinkedList<Disk, short>* _diskList;
+    Client* _client;
 };
 
 #endif /* STORAGECLIENT */

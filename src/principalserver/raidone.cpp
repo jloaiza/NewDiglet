@@ -24,6 +24,7 @@ RaidOne::RaidOne(std::string pID, int pBlockSize, int pMaxSize, bool pFunctional
 	_functional = pFunctional;
 	_working = pWorking;
 	_files = new nTree(); //Sustituir más adelante por loadTree
+	_currentDisk = _diskList->getHead();
 }
 
 void RaidOne::startDiskGroup(){
@@ -48,18 +49,19 @@ nTreeNode* RaidOne::createFile(nTreeNode* pActual, std::string pName, RegisterSp
 	std::cout<<"createFile"<<std::endl;
 	DataBuffer header = DataBuffer(); //Almacenará la información del header
 
+	std::cout<<"cf0"<<std::endl;
 	//Tomar la información
-	std::string* name = new std::string(pName);
-	std::string* author = new std::string(pUser);
-	int* dataBlock = new int(0);
-	short* formatSize = new short(pRegister->totalLength()*REGISTER_SIZE);
+	int dataBlock = 0;
+	short formatSize = pRegister->totalLength()*REGISTER_SIZE;
 
+	std::cout<<"cf1"<<std::endl;
 	//Agregar la informacion a los dataspaces
-	header.addToBuffer(name, STRING, FILENAME_SIZE);
-	header.addToBuffer(author, STRING, AUTHOR_SIZE);
-	header.addToBuffer(dataBlock, INT, FDATA_SIZE);
-	header.addToBuffer(formatSize, SHORT, REGS_SIZE);
+	header.addToBuffer(&pName, STRING, FILENAME_SIZE);
+	header.addToBuffer(&pUser, STRING, AUTHOR_SIZE);
+	header.addToBuffer(&dataBlock, INT, FDATA_SIZE);
+	header.addToBuffer(&formatSize, SHORT, REGS_SIZE);
 
+	std::cout<<"cf2"<<std::endl;
 	//Cargar una representacion del register format como data nodes
 	DataNode* regData = toDataNode(pRegister, REGCOL_SIZE, REGTYPE_SIZE, REGCOLSIZE_SIZE);
 
@@ -67,9 +69,11 @@ nTreeNode* RaidOne::createFile(nTreeNode* pActual, std::string pName, RegisterSp
 	std::string head = toBinary(header.getBuffer());
 	head += toBinary(regData);
 
+	std::cout<<"cf3"<<std::endl;
 	//Se divide el head en los espacios necesarios descontando el espacio ocupado por los siguientes bloques
 	ListNode<std::string>* strips = getStrips(head, _blockSize-BLOCKNEXT_SIZE);
 
+	std::cout<<"cf4"<<std::endl;
 	//blocks contendrá los bloques donde son incertados los datos
 	DoubleLinkedList<int, void> blocks = DoubleLinkedList<int, void>();
 
@@ -77,38 +81,56 @@ nTreeNode* RaidOne::createFile(nTreeNode* pActual, std::string pName, RegisterSp
 
 	//Insercion:
 	while(strips != 0){
-
+		if (!_currentDisk->getData()->isAlive()){
+			std::cout<<"?Error. Se ha perdido la conexión con el disco: "<<_currentDisk->getData()->getDiskDirection()<<"."<<std::endl;
+			std::cout<<"El diskgroup: "<<_id<<" estará deshabilitado hasta que se repare el error."<<std::endl;
+			_working = false;
+			_functional = false;
+			return 0;
+		}
 		std::string toWrite = BytesHandler::bin2str(*strips->getData());
-		blocks.insertEnd(new int(_currentDisk->getData()->writeBlock(toWrite)));
-
+		std::cout<<"cf4.1"<<std::endl;
+		int* ins = new int(_currentDisk->getData()->writeBlock(toWrite));
+		std::cout<<"cf4.1.2"<<std::endl;
+		if (*ins == 0){
+			std::cout<<"?Error. No se pudo escribir en uno de los discos, la escritura será interrumpida."<<std::endl;
+			std::cout<<"El archivo estaŕa corrupto."<<std::endl;
+			std::cout<<"El diskgroup: '"<<_id<<"' estará deshabilitado hasta que se repare el error."<<std::endl;
+			_working = false;
+			_functional = false;
+			return 0;
+		}
+		std::cout<<"cf4.1.3"<<std::endl;
+		blocks.insertEnd(ins);
+		std::cout<<"write block: "<<*ins<<std::endl;
+		std::cout<<"cf4.2"<<std::endl;
 		strips = strips->getNext();
 
-		if (_currentDisk->getNext() != 0){
-			_currentDisk = _currentDisk->getNext();
-		} else {
-			_currentDisk = _diskList->getHead();
-		}
+		_currentDisk = getNextDisk(_currentDisk);
 	}
 
 	//Se crea el archivo para el árbol
+	std::cout<<"cf5"<<std::endl;
 	iFile* file = new iFile(tempStart->getData()->getDiskDirection(), -1);
 	ListNode<int>* iBlock = blocks.getHead();
 	file->setStartBlock( *iBlock->getData() );
 
+	std::cout<<"cf6"<<std::endl;
 	//Se setean los bloques siguientes donde hubieron inserciones
 	while (iBlock->getNext() != 0){
 		int ip1, ip2, ip3, ip4;
 		short disk;
 
+		std::cout<<"cf6.1"<<std::endl;
 		ip1 = std::stoi(Tokenizer::getCommandSpace(getNextDisk(tempStart)->getData()->getIp(), 1, '.'));
 		ip2 = std::stoi(Tokenizer::getCommandSpace(getNextDisk(tempStart)->getData()->getIp(), 2, '.'));
 		ip3 = std::stoi(Tokenizer::getCommandSpace(getNextDisk(tempStart)->getData()->getIp(), 3, '.'));
 		ip4 = std::stoi(Tokenizer::getCommandSpace(getNextDisk(tempStart)->getData()->getIp(), 4, '.'));
 		disk = tempStart->getNext()->getData()->getDiskID();
 		
-
 		int nextBlock = *iBlock->getNext()->getData();
 
+		std::cout<<"cf6.2"<<std::endl;
 		std::string nextDir = "";
 		nextDir += BytesHandler::unum2bin(ip1, 1);
 		nextDir += BytesHandler::unum2bin(ip2, 1);
@@ -118,9 +140,13 @@ nTreeNode* RaidOne::createFile(nTreeNode* pActual, std::string pName, RegisterSp
 		nextDir += BytesHandler::unum2bin(nextBlock, 4);
 		nextDir = BytesHandler::bin2str(nextDir);
 
+		std::cout<<"cf6.3"<<std::endl;
 		tempStart->getData()->writeBytes(*iBlock->getData(), _blockSize-BLOCKNEXT_SIZE, BLOCKNEXT_SIZE, nextDir);
+		std::cout<<"cf6.4"<<std::endl;
+		iBlock = iBlock->getNext();
+		std::cout<<"cf6.5"<<std::endl;
 	}
-
+	std::cout<<"cf7"<<std::endl;
 	//Se incerta el ifile en el árbol y se devuelve el nodo correspondiente
 	_files->insert(file, pActual, pName, pUser, "");
 	return _files->getNode(pActual, pName);
@@ -161,6 +187,7 @@ void RaidOne::format(){
 		iNode->getData()->format(_blockSize);
 		iNode = iNode->getNext();
 	}
+	_currentDisk = _diskList->getHead();
 }
 
 void RaidOne::eraseFile(iFile* pFile){

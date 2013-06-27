@@ -34,7 +34,10 @@ void LSSNetworkHandler::inMessage(std::string pMessage, int pSocket){
 	} else if (command == "getSize"){
 		getSize(pSocket, param);
 	
-	} else if (command == "writeBytes"){
+	} else if (command == "disconnect"){
+		disconnectClient();
+
+	}else if (command == "writeBytes"){
 		writeBytes(pSocket, param);
 
 	} else if (command == "readBytes"){
@@ -85,8 +88,11 @@ void LSSNetworkHandler::isAlive(int pSocket, std::string pParam){
 		if (pParam == ""){
 			outMessage("?Error: El comando 'isAlive' espera un atributo\n", pSocket);
 		} else {
-			outMessage(LssOperations::isAlive(diskID), pSocket);
+			std::string out = LssOperations::isAlive(diskID);
+			std::cout<<"out: "<<out<<std::endl;
+			outMessage(out, pSocket);
 		}
+
 	} catch (std::exception e){
 		outMessage("?Error: El primer y segundo paremetro debe ser un número\n", pSocket);
 	}

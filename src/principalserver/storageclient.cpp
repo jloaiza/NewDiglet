@@ -7,11 +7,13 @@ StorageClient::StorageClient(std::string pIp, int pPort)
     _port = pPort;
     _diskList = new DoubleLinkedList<Disk, short>();
     startClient();
+    std::cout<<"client: '"<<pIp<<":"<<pPort<<"' created. "<<"Connection: "<<(isConnected()?"connected":"disconnected")<<std::endl;
 }
 
 
 std::string StorageClient::startClient()
 {
+
     Client* client = new Client(_ip, _port);
     client->Connect();
 
@@ -20,6 +22,7 @@ std::string StorageClient::startClient()
     client->sendMessage(message);
     std::string messagea = client->readMessage();
     _sessionID = std::stoi(messagea);
+    client->sendMessage("disconnect");
     delete client;
     return messagea;
 }
@@ -33,6 +36,7 @@ std::string StorageClient::format(int pDiskID, int pBlockSize)
 
     client->sendMessage(message);
     std::string messagea = client->readMessage();
+    client->sendMessage("disconnect");
     delete client;
     return messagea;
 }
@@ -46,6 +50,7 @@ std::string StorageClient::connect(int pDiskID, std::string pSecurityKeyMD5)
 
     client->sendMessage(message);
     std::string messagea = client->readMessage();
+    client->sendMessage("disconnect");
     delete client;
     return messagea;
 }
@@ -59,6 +64,7 @@ std::string StorageClient::readBlock(int pDiskID, int pBlock)
     std::string message = std::string("readBlock ") + std::to_string(_sessionID) + std::string(" ") + std::to_string(pDiskID) + std::string(" ") + std::to_string(pBlock);
     client->sendMessage(message);
     std::string messagea = client->readMessage();
+    client->sendMessage("disconnect");
     delete client;
     return messagea;
 }
@@ -70,8 +76,9 @@ int StorageClient::writeBlock(int pDiskID, std::string pData)
     std::string message = std::string("writeBlock ") + std::to_string(_sessionID) + std::string(" ") + std::to_string(pDiskID) + std::string(" ") + std::string(pData);
     client->sendMessage(message);
     std::string messagea = client->readMessage();
+    client->sendMessage("disconnect");
     delete client;
-    return std::stoi(messagea);
+    return std::stoi((messagea[0]!='?'?messagea:"0"));
 }
 
 std::string StorageClient::getDiskSize(int pDiskID)
@@ -81,6 +88,7 @@ std::string StorageClient::getDiskSize(int pDiskID)
     std::string message = std::string("getDiskSize ") + std::to_string(_sessionID) + std::string(" ") + std::to_string(pDiskID);
     client->sendMessage(message);
     std::string messagea = client->readMessage();
+    client->sendMessage("disconnect");
     delete client;
     return messagea;
 }
@@ -89,6 +97,7 @@ bool StorageClient::isConnected(){
     Client* client = new Client(_ip,_port);
     client->Connect();
     bool connected = client->isConnect();
+    client->sendMessage("disconnect");
     delete client;
     return connected;
 }
@@ -100,6 +109,7 @@ std::string StorageClient::writeBytes(int pDiskID, int pBlock, int pOffSet, int 
     std::string message = std::string("writeBytes ") + std::to_string(_sessionID) + std::string(" ") + std::to_string(pDiskID) + std::string(" ") + std::to_string(pBlock) + std::string(" ") + std::to_string(pOffSet) + std::string(" ") + std::to_string(pSize) + std::string(" ") + std::string(pData);
     client->sendMessage(message);
     std::string messagea = client->readMessage();
+    client->sendMessage("disconnect");
     delete client;
     return messagea;
 }
@@ -111,6 +121,7 @@ std::string StorageClient::readBytes(int pDiskID, int pBlock, int pOffSet, int p
     std::string message = std::string("readBytes ") + std::to_string(_sessionID) + std::string(" ") + std::to_string(pDiskID) + std::string(" ") + std::to_string(pBlock) + std::string(" ") + std::to_string(pOffSet) + std::string(" ") + std::to_string(pSize);
     client->sendMessage(message);
     std::string messagea = client->readMessage();
+    client->sendMessage("disconnect");
     delete client;
     return messagea;
 }
@@ -122,7 +133,9 @@ bool StorageClient::isAlive(int pDiskID)
     std::string message = std::string("isAlive ") + std::to_string(pDiskID);
     client->sendMessage(message);
     std::string messagea = client->readMessage();
+    client->sendMessage("disconnect");
     delete client;
+    std::cout<<"isAlive request. Disk: '"<<pDiskID<<"' Alive: "<<messagea<<std::endl;
     return messagea == "true";
 }
 

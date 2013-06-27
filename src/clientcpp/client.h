@@ -76,6 +76,7 @@ class Client
         std::string _ip;
         int _port;
         int _socket;
+        int _byteCount;
         int cto;
         struct sockaddr_in _connection;
         char _inMessage[BUFFERSIZE];

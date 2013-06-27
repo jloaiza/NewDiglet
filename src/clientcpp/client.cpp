@@ -49,11 +49,12 @@ void Client::sendMessage(std::string pMessage)
 
 std::string Client::readMessage()
 {
-     if (read(_socket, _inMessage, sizeof(_inMessage)) < 0)
-     {
-         Error ("No se pudo leer el mensaje correctamente.");
-     }
-     std::string pMessage = _inMessage;
+    memset(_inMessage, 0, BUFFERSIZE);
+    if ((_byteCount = recv(_socket, _inMessage, BUFFERSIZE, 0))== -1)
+    {
+        Error("No se pudo recibir la información.");
+    }
+     std::string pMessage = std::string(_inMessage);
      return pMessage;
 }
 
@@ -66,5 +67,6 @@ bool Client::isConnect()
    {
         connect = true;
    }
+   usleep(10000);
    return connect;
 }

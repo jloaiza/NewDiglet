@@ -146,7 +146,7 @@ short Lss::writeA (std::string pData)
 		
 		writeB (pData, 12+(freeblock*_blockSize), _blockSize );		/* escribe los datos en el bloque borrado */
 	}
-	
+	std::cout<<"Write A. Disk: '"<< _id<<"' freeblock: "<<freeblock<<std::endl;
 	return freeblock;		/* numero de bloque donde escribio los datos*/
 }
 
